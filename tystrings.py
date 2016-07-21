@@ -44,6 +44,33 @@ def convert_strings(filename):
                 logging.debug('%s: %s' % (key, value))
         f.close()
     return result
+
+
+def translate(filename, dic):
+    if os.path.exists(filename):
+        f = codecs.open(filename, "r", encoding='utf_16_le')
+        lines = f.readlines()
+        for (index, line) in enumerate(lines):
+            match = re.match(r'"(?P<key>.*?)" = "(?P<value>.*?)";', line)
+            if match is not None:
+                key = match.group('key')
+                result = dic.get(key, None)
+
+                if result is not None:
+                    value = match.group('value')
+                    if dic[key] != value:
+                        line = '"%s" = "%s";\n' % (key, result)
+                        lines[index] = line
+                        logging.debug('translate %s to %s' % (value, result))
+        f.close()
+
+        f = codecs.open(filename, "w+", encoding='utf_16_le')
+        f.writelines(lines)
+        f.flush()
+        f.close()
+
+
+
 def arg_parser():
     description = r"""
   _______     _____ _        _
@@ -78,14 +105,8 @@ def main():
 
     __run_script('genstrings %s' % args.filename)
 
-    # f = codecs.open(args.filename, "r", encoding='utf_16')
-    # for line in f:
-    #     match = re.match(r'"(?P<key>.*?)" = "(?P<value>.*?)";', line)
-    #     if match is not None:
-    #         # print match.group('key'), match.group('value')
-    #         source[match.group('key')] = match.group('value')
-    #
-    # print source
+    translate(output, source)
+
 
 if __name__ == '__main__':
     main()
