@@ -8,6 +8,9 @@ import subprocess
 __author__ = 'luckytianyiyan@gmail.com'
 
 
+STRING_FILE = 'Localizable.strings'
+
+
 def __run_script(script, display_output=True):
     if display_output:
         logging.info('%s' % script)
@@ -28,6 +31,19 @@ def __run_script(script, display_output=True):
     return process.returncode, output
 
 
+def convert_strings(filename):
+    result = {}
+    if os.path.exists(filename):
+        f = codecs.open(filename, "r", encoding='utf_16')
+        for line in f:
+            match = re.match(r'"(?P<key>.*?)" = "(?P<value>.*?)";', line)
+            if match is not None:
+                key = match.group('key')
+                value = match.group('value')
+                result[key] = value
+                logging.debug('%s: %s' % (key, value))
+        f.close()
+    return result
 def arg_parser():
     description = r"""
   _______     _____ _        _
@@ -52,9 +68,13 @@ def main():
 
     logging.basicConfig(level=logging.DEBUG, format='%(message)s', )
 
-    source = {}
     if os.path.isdir(args.filename):
         parser.error('%s is a directory' % args.filename)
+
+    output = STRING_FILE
+    source = convert_strings(output)
+
+    logging.debug('\nsource strings count: %r\n' % len(source))
 
     __run_script('genstrings %s' % args.filename)
 
