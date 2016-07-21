@@ -18,6 +18,7 @@ def arg_parser():
 
     """
     parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter, description=description)
+    parser.add_argument('filename', help='Objective-C source file. (.m file)')
 
     return parser
 
@@ -26,7 +27,7 @@ def main():
     parser = arg_parser()
     args = parser.parse_args()
     source = {}
-    f = codecs.open('Localizable.strings', "r", encoding='utf_16')
+    f = codecs.open(args.filename, "r", encoding='utf_16')
     for line in f:
         match = re.match(r'"(?P<key>.*?)" = "(?P<value>.*?)";', line)
         if match is not None:
