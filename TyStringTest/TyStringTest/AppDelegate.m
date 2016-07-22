@@ -17,6 +17,8 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    NSLocalizedString(@"app.one", nil);
+    NSLocalizedString(@"app.two", nil);
     _window = [[UIWindow alloc] init];
     TableViewController *viewController = [[TableViewController alloc] init];
     UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:viewController];

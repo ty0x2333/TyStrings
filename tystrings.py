@@ -18,9 +18,12 @@ class Strings(object):
         self.filename = os.path.join(dir if dir else '', STRING_FILE)
         self.__reference = {}
 
-    def generate(self, input):
+    def generate(self, files):
         self.__reference = self.__generate_reference()
-        self.__run_script('genstrings %s -o %s' % (input, self.__dir))
+        script = 'genstrings'
+        for filename in files:
+            script += ' %s' % filename
+        self.__run_script('%s -o %s' % (script, self.__dir))
         self.__translate()
 
     @staticmethod
@@ -93,8 +96,8 @@ def arg_parser():
        |___/                         |___/
     """
     parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter, description=description)
-    parser.add_argument('filename', help='Objective-C source file. (.m file)')
-    parser.add_argument('-o', '--output', dest="dir", help='place output files in \'dir\'')
+    parser.add_argument('files', metavar='file', nargs='+', help='source file .[mc]')
+    parser.add_argument('-o', '--output', dest='dir', help='place output files in \'dir\'')
 
     return parser
 
@@ -105,12 +108,15 @@ def main():
 
     logging.basicConfig(level=logging.DEBUG, format='%(message)s', )
 
-    if os.path.isdir(args.filename):
-        parser.error('%s is a directory' % args.filename)
+    for filename in args.files:
+        if not os.path.exists(filename):
+            parser.error('%s not exists' % filename)
+        if os.path.isdir(filename):
+            parser.error('%s is a directory' % filename)
 
     strings = Strings(args.dir)
 
-    strings.generate(input=args.filename)
+    strings.generate(args.files)
 
     # logging.debug('\nsource strings count: %r\n' % len(source))
 
