@@ -70,7 +70,6 @@ def translate(filename, dic):
         f.close()
 
 
-
 def arg_parser():
     description = r"""
   _______     _____ _        _
@@ -81,10 +80,10 @@ def arg_parser():
     |_|\__, |_____/ \__|_|  |_|_| |_|\__, |___/
         __/ |                         __/ |
        |___/                         |___/
-
     """
     parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter, description=description)
     parser.add_argument('filename', help='Objective-C source file. (.m file)')
+    parser.add_argument('-o', '--output', dest="dir", help='place output files in \'dir\'')
 
     return parser
 
@@ -98,7 +97,7 @@ def main():
     if os.path.isdir(args.filename):
         parser.error('%s is a directory' % args.filename)
 
-    output = STRING_FILE
+    output = os.path.join(args.dir if args.dir else '', STRING_FILE)
     source = convert_strings(output)
 
     logging.debug('\nsource strings count: %r\n' % len(source))
