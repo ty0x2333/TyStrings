@@ -13,14 +13,16 @@ STRING_FILE = 'Localizable.strings'
 
 # Colors
 BLUE = '\033[1;94m'
-GREEN = '\033[92m'
+GREEN = '\033[1;92m'
 YELLOW = '\033[93m'
 RED = '\033[91m'
 HIGH_LIGHT = '\033[1;97m'
 ENDC = '\033[0m'
 
 # Format
-STEP_FORMAT = BLUE + '==>' + HIGH_LIGHT + '{}' + ENDC
+STEP_FORMAT = '==> ' + HIGH_LIGHT + '{}' + ENDC
+DONE_FORMAT = BLUE + STEP_FORMAT
+SUCCESS_FORMAT = GREEN + STEP_FORMAT
 
 
 class Strings(object):
@@ -69,7 +71,7 @@ class Strings(object):
                     value = match.group('value')
                     self.__reference[key] = value
             f.close()
-        logging.info(STEP_FORMAT.format(' Generated Reference'))
+        logging.info(DONE_FORMAT.format('Generated Reference'))
         logging.info('count: %r' % len(self.__reference))
 
     def __translate(self):
@@ -97,7 +99,7 @@ class Strings(object):
         f.flush()
         f.close()
 
-        logging.info(STEP_FORMAT.format(' Translated Strings'))
+        logging.info(DONE_FORMAT.format('Translated Strings'))
         logging.info('count: %r' % sum)
         logging.info('')
         for k in translated.keys():
