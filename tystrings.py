@@ -9,8 +9,18 @@ import subprocess
 __author__ = 'luckytianyiyan@gmail.com'
 __version__ = '0.1.0'
 
-
 STRING_FILE = 'Localizable.strings'
+
+# Colors
+BLUE = '\033[1;94m'
+GREEN = '\033[92m'
+YELLOW = '\033[93m'
+RED = '\033[91m'
+HIGH_LIGHT = '\033[1;97m'
+ENDC = '\033[0m'
+
+# Format
+STEP_FORMAT = BLUE + '==>' + HIGH_LIGHT + '{}' + ENDC
 
 
 class Strings(object):
@@ -49,7 +59,6 @@ class Strings(object):
         return process.returncode, output
 
     def __generate_reference(self):
-        logging.debug('generating reference')
         self.__reference = {}
         if os.path.exists(self.filename):
             f = codecs.open(self.filename, "r", encoding=self.encoding)
@@ -59,9 +68,9 @@ class Strings(object):
                     key = match.group('key')
                     value = match.group('value')
                     self.__reference[key] = value
-                    logging.debug('%s: %s' % (key, value))
             f.close()
-        logging.info('generated reference count: %r' % len(self.__reference))
+        logging.info(STEP_FORMAT.format(' Generated Reference'))
+        logging.info('count: %r' % len(self.__reference))
 
     def __translate(self):
         if os.path.exists(self.filename):
