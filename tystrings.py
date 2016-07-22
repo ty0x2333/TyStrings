@@ -12,63 +12,73 @@ STRING_FILE = 'Localizable.strings'
 DEFAULT_ENCODING = 'utf_16_le'
 
 
-def __run_script(script, display_output=True):
-    if display_output:
-        logging.info('%s' % script)
-        logging.info('---')
-    process = subprocess.Popen(script, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    output = ''
-    while process.poll() is None:
-        line = process.stdout.readline()
-        if line:
-            output += line
-            if display_output:
-                logging.info(line.strip())
-    if display_output:
-        logging.info('process finished with %s\n' % ('success' if
-                                                     process.returncode == 0 or process.returncode is None else
-                                                     ('exit code %r' % process.returncode)))
+class Strings(object):
+    def __init__(self, dir):
+        self.__dir = dir
+        self.filename = os.path.join(dir if dir else '', STRING_FILE)
+        self.__reference = {}
 
-    return process.returncode, output
+    def generate(self, input):
+        self.__reference = self.__generate_reference()
+        self.__run_script('genstrings %s -o %s' % (input, self.__dir))
+        self.__translate()
 
+    @staticmethod
+    def __run_script(script, display_output=True):
+        if display_output:
+            logging.info('%s' % script)
+            logging.info('---')
+        process = subprocess.Popen(script, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        output = ''
+        while process.poll() is None:
+            line = process.stdout.readline()
+            if line:
+                output += line
+                if display_output:
+                    logging.info(line.strip())
+        if display_output:
+            logging.info('process finished with %s\n' % ('success' if
+                                                         process.returncode == 0 or process.returncode is None else
+                                                         ('exit code %r' % process.returncode)))
 
-def convert_strings(filename):
-    result = {}
-    if os.path.exists(filename):
-        f = codecs.open(filename, "r", encoding=DEFAULT_ENCODING)
-        for line in f:
-            match = re.match(r'"(?P<key>.*?)" = "(?P<value>.*?)";', line)
-            if match is not None:
-                key = match.group('key')
-                value = match.group('value')
-                result[key] = value
-                logging.debug('%s: %s' % (key, value))
-        f.close()
-    return result
+        return process.returncode, output
 
-
-def translate(filename, dic):
-    if os.path.exists(filename):
-        f = codecs.open(filename, "r", encoding=DEFAULT_ENCODING)
-        lines = f.readlines()
-        for (index, line) in enumerate(lines):
-            match = re.match(r'"(?P<key>.*?)" = "(?P<value>.*?)";', line)
-            if match is not None:
-                key = match.group('key')
-                result = dic.get(key, None)
-
-                if result is not None:
+    def __generate_reference(self):
+        result = {}
+        if os.path.exists(self.filename):
+            f = codecs.open(self.filename, "r", encoding=DEFAULT_ENCODING)
+            for line in f:
+                match = re.match(r'"(?P<key>.*?)" = "(?P<value>.*?)";', line)
+                if match is not None:
+                    key = match.group('key')
                     value = match.group('value')
-                    if dic[key] != value:
-                        line = '"%s" = "%s";\n' % (key, result)
-                        lines[index] = line
-                        logging.debug('translate %s to %s' % (value, result))
-        f.close()
+                    result[key] = value
+                    logging.debug('%s: %s' % (key, value))
+            f.close()
+        return result
 
-        f = codecs.open(filename, "w+", encoding=DEFAULT_ENCODING)
-        f.writelines(lines)
-        f.flush()
-        f.close()
+    def __translate(self):
+        if os.path.exists(self.filename):
+            f = codecs.open(self.filename, "r", encoding=DEFAULT_ENCODING)
+            lines = f.readlines()
+            for (index, line) in enumerate(lines):
+                match = re.match(r'"(?P<key>.*?)" = "(?P<value>.*?)";', line)
+                if match is not None:
+                    key = match.group('key')
+                    result = self.__reference.get(key, None)
+
+                    if result is not None:
+                        value = match.group('value')
+                        if self.__reference[key] != value:
+                            line = '"%s" = "%s";\n' % (key, result)
+                            lines[index] = line
+                            logging.debug('translate %s to %s' % (value, result))
+            f.close()
+
+            f = codecs.open(self.filename, "w+", encoding=DEFAULT_ENCODING)
+            f.writelines(lines)
+            f.flush()
+            f.close()
 
 
 def arg_parser():
@@ -98,15 +108,11 @@ def main():
     if os.path.isdir(args.filename):
         parser.error('%s is a directory' % args.filename)
 
-    output = os.path.join(args.dir if args.dir else '', STRING_FILE)
-    source = convert_strings(output)
+    strings = Strings(args.dir)
 
-    logging.debug('\nsource strings count: %r\n' % len(source))
+    strings.generate(input=args.filename)
 
-    __run_script('genstrings %s -o %s' % (args.filename, args.dir))
-
-    translate(output, source)
-
+    # logging.debug('\nsource strings count: %r\n' % len(source))
 
 if __name__ == '__main__':
     main()
