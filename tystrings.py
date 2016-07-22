@@ -122,6 +122,7 @@ def arg_parser():
     parser.add_argument('--version', action='version', version=__version__)
     parser.add_argument('files', metavar='file', nargs='+', help='source file .[mc]')
     parser.add_argument('-o', '--output', dest='dir', help='place output files in \'dir\'')
+    parser.add_argument('-v', '--verbose', action="store_true", dest="verbose", help="show more debugging information")
 
     return parser
 
@@ -130,7 +131,7 @@ def main():
     parser = arg_parser()
     args = parser.parse_args()
 
-    logging.basicConfig(level=logging.DEBUG, format='%(message)s', )
+    logging.basicConfig(level=logging.DEBUG if args.verbose else logging.INFO, format='%(message)s', )
 
     for filename in args.files:
         if not os.path.exists(filename):
