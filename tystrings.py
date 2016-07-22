@@ -94,16 +94,17 @@ class Strings(object):
                         translated[key] = result
         f.close()
 
+        logging.info(DONE_FORMAT.format('Translated Strings'))
+        logging.info('count: %r' % sum)
+        logging.debug('')
+        for k in translated.keys():
+            logging.debug('%s => %s' % (k, translated[k]))
+
         f = codecs.open(self.filename, "w+", encoding=self.encoding)
         f.writelines(lines)
         f.flush()
         f.close()
-
-        logging.info(DONE_FORMAT.format('Translated Strings'))
-        logging.info('count: %r' % sum)
-        logging.info('')
-        for k in translated.keys():
-            logging.debug('%s => %s' % (k, translated[k]))
+        logging.info(SUCCESS_FORMAT.format('Write strings file to: %s' % self.filename))
 
 
 def arg_parser():
