@@ -9,13 +9,13 @@ __author__ = 'luckytianyiyan@gmail.com'
 
 
 STRING_FILE = 'Localizable.strings'
-DEFAULT_ENCODING = 'utf_16_le'
 
 
 class Strings(object):
-    def __init__(self, dir):
-        self.__dir = dir
-        self.filename = os.path.join(dir if dir else '', STRING_FILE)
+    def __init__(self, target_dir, encoding='utf_16_le'):
+        self.__dir = target_dir
+        self.encoding = encoding
+        self.filename = os.path.join(target_dir if target_dir else '', STRING_FILE)
         self.__reference = {}
 
     def generate(self, files):
@@ -49,7 +49,7 @@ class Strings(object):
     def __generate_reference(self):
         result = {}
         if os.path.exists(self.filename):
-            f = codecs.open(self.filename, "r", encoding=DEFAULT_ENCODING)
+            f = codecs.open(self.filename, "r", encoding=self.encoding)
             for line in f:
                 match = re.match(r'"(?P<key>.*?)" = "(?P<value>.*?)";', line)
                 if match is not None:
@@ -62,7 +62,7 @@ class Strings(object):
 
     def __translate(self):
         if os.path.exists(self.filename):
-            f = codecs.open(self.filename, "r", encoding=DEFAULT_ENCODING)
+            f = codecs.open(self.filename, "r", encoding=self.encoding)
             lines = f.readlines()
             for (index, line) in enumerate(lines):
                 match = re.match(r'"(?P<key>.*?)" = "(?P<value>.*?)";', line)
@@ -78,7 +78,7 @@ class Strings(object):
                             logging.debug('translate %s to %s' % (value, result))
             f.close()
 
-            f = codecs.open(self.filename, "w+", encoding=DEFAULT_ENCODING)
+            f = codecs.open(self.filename, "w+", encoding=self.encoding)
             f.writelines(lines)
             f.flush()
             f.close()
