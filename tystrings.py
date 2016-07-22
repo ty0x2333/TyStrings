@@ -21,7 +21,7 @@ class Strings(object):
         self.__reference = {}
 
     def generate(self, files):
-        self.__reference = self.__generate_reference()
+        self.__generate_reference()
         script = 'genstrings'
         for filename in files:
             script += ' %s' % filename
@@ -49,7 +49,8 @@ class Strings(object):
         return process.returncode, output
 
     def __generate_reference(self):
-        result = {}
+        logging.debug('generating reference')
+        self.__reference = {}
         if os.path.exists(self.filename):
             f = codecs.open(self.filename, "r", encoding=self.encoding)
             for line in f:
@@ -57,10 +58,10 @@ class Strings(object):
                 if match is not None:
                     key = match.group('key')
                     value = match.group('value')
-                    result[key] = value
+                    self.__reference[key] = value
                     logging.debug('%s: %s' % (key, value))
             f.close()
-        return result
+        logging.info('generated reference count: %r' % len(self.__reference))
 
     def __translate(self):
         if os.path.exists(self.filename):
