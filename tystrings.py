@@ -24,6 +24,10 @@ STEP_FORMAT = '==> ' + HIGH_LIGHT + '{}' + ENDC
 DONE_FORMAT = BLUE + STEP_FORMAT
 SUCCESS_FORMAT = GREEN + STEP_FORMAT
 
+# Emoji
+BEER_EMOJI = u'\U0001F37A '
+BEERS_EMOJI = u'\U0001F37B '
+
 
 class Strings(object):
     def __init__(self, target_dir, encoding='utf_16_le'):
@@ -41,22 +45,18 @@ class Strings(object):
         self.__translate()
 
     @staticmethod
-    def __run_script(script, display_output=True):
-        if display_output:
-            logging.info('%s' % script)
-            logging.info('---')
+    def __run_script(script):
+        logging.debug('\nrun: %s' % script)
         process = subprocess.Popen(script, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         output = ''
         while process.poll() is None:
             line = process.stdout.readline()
             if line:
                 output += line
-                if display_output:
-                    logging.info(line.strip())
-        if display_output:
-            logging.info('process finished with %s\n' % ('success' if
-                                                         process.returncode == 0 or process.returncode is None else
-                                                         ('exit code %r' % process.returncode)))
+                logging.debug(line.strip())
+        logging.debug(BEER_EMOJI + ' process finished with %s' % ('success' if
+                                                      process.returncode == 0 or process.returncode is None else
+                                                     ('exit code %r' % process.returncode)))
 
         return process.returncode, output
 
@@ -141,7 +141,7 @@ def main():
 
     strings.generate(args.files)
 
-    # logging.debug('\nsource strings count: %r\n' % len(source))
+    logging.info(BEERS_EMOJI + HIGH_LIGHT + ' have fun!' + ENDC)
 
 if __name__ == '__main__':
     main()
