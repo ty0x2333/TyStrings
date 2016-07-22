@@ -9,6 +9,7 @@ __author__ = 'luckytianyiyan@gmail.com'
 
 
 STRING_FILE = 'Localizable.strings'
+DEFAULT_ENCODING = 'utf_16_le'
 
 
 def __run_script(script, display_output=True):
@@ -34,7 +35,7 @@ def __run_script(script, display_output=True):
 def convert_strings(filename):
     result = {}
     if os.path.exists(filename):
-        f = codecs.open(filename, "r", encoding='utf_16')
+        f = codecs.open(filename, "r", encoding=DEFAULT_ENCODING)
         for line in f:
             match = re.match(r'"(?P<key>.*?)" = "(?P<value>.*?)";', line)
             if match is not None:
@@ -48,7 +49,7 @@ def convert_strings(filename):
 
 def translate(filename, dic):
     if os.path.exists(filename):
-        f = codecs.open(filename, "r", encoding='utf_16_le')
+        f = codecs.open(filename, "r", encoding=DEFAULT_ENCODING)
         lines = f.readlines()
         for (index, line) in enumerate(lines):
             match = re.match(r'"(?P<key>.*?)" = "(?P<value>.*?)";', line)
@@ -64,7 +65,7 @@ def translate(filename, dic):
                         logging.debug('translate %s to %s' % (value, result))
         f.close()
 
-        f = codecs.open(filename, "w+", encoding='utf_16_le')
+        f = codecs.open(filename, "w+", encoding=DEFAULT_ENCODING)
         f.writelines(lines)
         f.flush()
         f.close()
