@@ -7,6 +7,7 @@ import os
 import logging
 import subprocess
 __author__ = 'luckytianyiyan@gmail.com'
+__version__ = '0.1.0'
 
 
 STRING_FILE = 'Localizable.strings'
@@ -97,6 +98,7 @@ def arg_parser():
        |___/                         |___/
     """
     parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter, description=description)
+    parser.add_argument('--version', action='version', version=__version__)
     parser.add_argument('files', metavar='file', nargs='+', help='source file .[mc]')
     parser.add_argument('-o', '--output', dest='dir', help='place output files in \'dir\'')
 
