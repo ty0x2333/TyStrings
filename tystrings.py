@@ -73,27 +73,35 @@ class Strings(object):
         logging.info('count: %r' % len(self.__reference))
 
     def __translate(self):
-        if os.path.exists(self.filename):
-            f = codecs.open(self.filename, "r", encoding=self.encoding)
-            lines = f.readlines()
-            for (index, line) in enumerate(lines):
-                match = re.match(r'"(?P<key>.*?)" = "(?P<value>.*?)";', line)
-                if match is not None:
-                    key = match.group('key')
-                    result = self.__reference.get(key, None)
+        sum = 0
+        translated = {}
+        f = codecs.open(self.filename, "r", encoding=self.encoding)
+        lines = f.readlines()
+        for (index, line) in enumerate(lines):
+            match = re.match(r'"(?P<key>.*?)" = "(?P<value>.*?)";', line)
+            if match is not None:
+                key = match.group('key')
+                result = self.__reference.get(key, None)
 
-                    if result is not None:
-                        value = match.group('value')
-                        if self.__reference[key] != value:
-                            line = '"%s" = "%s";\n' % (key, result)
-                            lines[index] = line
-                            logging.debug('translate %s to %s' % (value, result))
-            f.close()
+                if result is not None:
+                    value = match.group('value')
+                    if self.__reference[key] != value:
+                        line = '"%s" = "%s";\n' % (key, result)
+                        lines[index] = line
+                        sum += 1
+                        translated[key] = result
+        f.close()
 
-            f = codecs.open(self.filename, "w+", encoding=self.encoding)
-            f.writelines(lines)
-            f.flush()
-            f.close()
+        f = codecs.open(self.filename, "w+", encoding=self.encoding)
+        f.writelines(lines)
+        f.flush()
+        f.close()
+
+        logging.info(STEP_FORMAT.format(' Translated Strings'))
+        logging.info('count: %r' % sum)
+        logging.info('')
+        for k in translated.keys():
+            logging.debug('%s => %s' % (k, translated[k]))
 
 
 def arg_parser():
