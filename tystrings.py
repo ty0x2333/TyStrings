@@ -103,7 +103,7 @@ def main():
 
     logging.debug('\nsource strings count: %r\n' % len(source))
 
-    __run_script('genstrings %s' % args.filename)
+    __run_script('genstrings %s -o %s' % (args.filename, args.dir))
 
     translate(output, source)
 
