@@ -1,15 +1,10 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
-import re
-import codecs
 import argparse
 import os
 import logging
-import subprocess
 __author__ = 'luckytianyiyan@gmail.com'
 __version__ = '0.1.0'
-
-STRING_FILE = 'Localizable.strings'
 
 # Colors
 BLUE = '\033[1;94m'
@@ -29,82 +24,15 @@ BEER_EMOJI = u'\U0001F37A '
 BEERS_EMOJI = u'\U0001F37B '
 
 
-class Strings(object):
-    def __init__(self, target_dir, encoding='utf_16_le'):
-        self.__dir = target_dir
-        self.encoding = encoding
-        self.filename = os.path.join(target_dir if target_dir else '', STRING_FILE)
-        self.__reference = {}
+logger = logging.getLogger('tystrings')
+handler = logging.StreamHandler()
+handler.setLevel(logging.DEBUG)
+formatter = logging.Formatter('%(message)s')
+handler.setFormatter(formatter)
+logger.addHandler(handler)
+logger.setLevel(logging.INFO)
 
-    def generate(self, files):
-        self.__generate_reference()
-        script = 'genstrings'
-        for filename in files:
-            script += ' %s' % filename
-        self.__run_script('%s -o %s' % (script, self.__dir))
-        self.__translate()
-
-    @staticmethod
-    def __run_script(script):
-        logging.debug('\nrun: %s' % script)
-        process = subprocess.Popen(script, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        output = ''
-        while process.poll() is None:
-            line = process.stdout.readline()
-            if line:
-                output += line
-                logging.debug(line.strip())
-        logging.debug(BEER_EMOJI + ' process finished with %s' % ('success' if
-                                                      process.returncode == 0 or process.returncode is None else
-                                                     ('exit code %r' % process.returncode)))
-
-        return process.returncode, output
-
-    def __generate_reference(self):
-        self.__reference = {}
-        if os.path.exists(self.filename):
-            f = codecs.open(self.filename, "r", encoding=self.encoding)
-            for line in f:
-                match = re.match(r'"(?P<key>.*?)" = "(?P<value>.*?)";', line)
-                if match is not None:
-                    key = match.group('key')
-                    value = match.group('value')
-                    self.__reference[key] = value
-            f.close()
-        logging.info(DONE_FORMAT.format('Generated Reference'))
-        logging.info('count: %r' % len(self.__reference))
-
-    def __translate(self):
-        sum = 0
-        translated = {}
-        f = codecs.open(self.filename, "r", encoding=self.encoding)
-        lines = f.readlines()
-        for (index, line) in enumerate(lines):
-            match = re.match(r'"(?P<key>.*?)" = "(?P<value>.*?)";', line)
-            if match is not None:
-                key = match.group('key')
-                result = self.__reference.get(key, None)
-
-                if result is not None:
-                    value = match.group('value')
-                    if self.__reference[key] != value:
-                        line = '"%s" = "%s";\n' % (key, result)
-                        lines[index] = line
-                        sum += 1
-                        translated[key] = result
-        f.close()
-
-        logging.info(DONE_FORMAT.format('Translated Strings'))
-        logging.info('count: %r' % sum)
-        logging.debug('')
-        for k in translated.keys():
-            logging.debug('%s => %s' % (k, translated[k]))
-
-        f = codecs.open(self.filename, "w+", encoding=self.encoding)
-        f.writelines(lines)
-        f.flush()
-        f.close()
-        logging.info(SUCCESS_FORMAT.format('Write strings file to: %s' % self.filename))
+from .strings import Strings
 
 
 def arg_parser():
@@ -131,7 +59,8 @@ def main():
     parser = arg_parser()
     args = parser.parse_args()
 
-    logging.basicConfig(level=logging.DEBUG if args.verbose else logging.INFO, format='%(message)s', )
+    if args.verbose:
+        logger.setLevel(logging.DEBUG)
 
     for filename in args.files:
         if not os.path.exists(filename):
@@ -143,7 +72,7 @@ def main():
 
     strings.generate(args.files)
 
-    logging.info(BEERS_EMOJI + HIGH_LIGHT + ' have fun!' + ENDC)
+    logger.info(BEERS_EMOJI + HIGH_LIGHT + ' have fun!' + ENDC)
 
 if __name__ == '__main__':
     main()
