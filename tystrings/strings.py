@@ -2,7 +2,7 @@ import os
 import re
 import codecs
 import subprocess
-from . import logger, BEER_EMOJI, DONE_FORMAT, SUCCESS_FORMAT
+from . import logger
 
 STRING_FILE = 'Localizable.strings'
 
@@ -32,9 +32,7 @@ class Strings(object):
             if line:
                 output += line
                 logger.debug(line.strip())
-        logger.debug(BEER_EMOJI + ' process finished with %s' % ('success' if
-                                                      process.returncode == 0 or process.returncode is None else
-                                                     ('exit code %r' % process.returncode)))
+        logger.finished(process.returncode)
 
         return process.returncode, output
 
@@ -49,37 +47,40 @@ class Strings(object):
                     value = match.group('value')
                     self.__reference[key] = value
             f.close()
-        logger.info(DONE_FORMAT.format('Generated Reference'))
+        logger.done('Generated Reference')
         logger.info('count: %r' % len(self.__reference))
 
     def __translate(self):
         sum = 0
         translated = {}
-        f = codecs.open(self.filename, "r", encoding=self.encoding)
-        lines = f.readlines()
-        for (index, line) in enumerate(lines):
-            match = re.match(r'"(?P<key>.*?)" = "(?P<value>.*?)";', line)
-            if match is not None:
-                key = match.group('key')
-                result = self.__reference.get(key, None)
+        try:
+            f = codecs.open(self.filename, "r", encoding=self.encoding)
+            lines = f.readlines()
+            for (index, line) in enumerate(lines):
+                match = re.match(r'"(?P<key>.*?)" = "(?P<value>.*?)";', line)
+                if match is not None:
+                    key = match.group('key')
+                    result = self.__reference.get(key, None)
 
-                if result is not None:
-                    value = match.group('value')
-                    if self.__reference[key] != value:
-                        line = '"%s" = "%s";\n' % (key, result)
-                        lines[index] = line
-                        sum += 1
-                        translated[key] = result
-        f.close()
+                    if result is not None:
+                        value = match.group('value')
+                        if self.__reference[key] != value:
+                            line = '"%s" = "%s";\n' % (key, result)
+                            lines[index] = line
+                            sum += 1
+                            translated[key] = result
+            f.close()
 
-        logger.info(DONE_FORMAT.format('Translated Strings'))
-        logger.info('count: %r' % sum)
-        logger.debug('')
-        for k in translated.keys():
-            logger.debug('%s => %s' % (k, translated[k]))
+            logger.done('Translated Strings')
+            logger.info('count: %r' % sum)
+            logger.debug('')
+            for k in translated.keys():
+                logger.debug('%s => %s' % (k, translated[k]))
 
-        f = codecs.open(self.filename, "w+", encoding=self.encoding)
-        f.writelines(lines)
-        f.flush()
-        f.close()
-        logger.info(SUCCESS_FORMAT.format('Write strings file to: %s' % self.filename))
+            f = codecs.open(self.filename, "w+", encoding=self.encoding)
+            f.writelines(lines)
+            f.flush()
+            f.close()
+            logger.addition('Write strings file to: %s' % self.filename)
+        except Exception as e:
+            logger.error(e)

@@ -3,34 +3,14 @@
 import argparse
 import os
 import logging
+from . import tylogger
 __author__ = 'luckytianyiyan@gmail.com'
 __version__ = '0.1.0'
 
-# Colors
-BLUE = '\033[1;94m'
-GREEN = '\033[1;92m'
-YELLOW = '\033[93m'
-RED = '\033[91m'
-HIGH_LIGHT = '\033[1;97m'
-ENDC = '\033[0m'
 
-# Format
-STEP_FORMAT = '==> ' + HIGH_LIGHT + '{}' + ENDC
-DONE_FORMAT = BLUE + STEP_FORMAT
-SUCCESS_FORMAT = GREEN + STEP_FORMAT
-
-# Emoji
-BEER_EMOJI = u'\U0001F37A '
-BEERS_EMOJI = u'\U0001F37B '
-
+logging.setLoggerClass(tylogger.TyLogger)
 
 logger = logging.getLogger('tystrings')
-handler = logging.StreamHandler()
-handler.setLevel(logging.DEBUG)
-formatter = logging.Formatter('%(message)s')
-handler.setFormatter(formatter)
-logger.addHandler(handler)
-logger.setLevel(logging.INFO)
 
 from .strings import Strings
 
@@ -72,7 +52,7 @@ def main():
 
     strings.generate(args.files)
 
-    logger.info(BEERS_EMOJI + HIGH_LIGHT + ' have fun!' + ENDC)
+    logger.success('have fun!')
 
 if __name__ == '__main__':
     main()
