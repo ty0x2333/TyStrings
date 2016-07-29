@@ -20,6 +20,9 @@ from os import path
 
 here = path.abspath(path.dirname(__file__))
 
+with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
+    long_description = f.read()
+
 setup(
     name='tystrings',
 
@@ -29,7 +32,7 @@ setup(
     version=__import__('tystrings').__version__,
 
     description='strings file generation tool for iOS',
-    # long_description=long_description,
+    long_description=long_description,
 
     # The project's main homepage.
     url='https://github.com/luckytianyiyan/TyStrings',
@@ -70,7 +73,7 @@ setup(
     # You can just specify the packages manually here if your project is
     # simple. Or you can use find_packages().
     # packages=find_packages(exclude=['contrib', 'docs', 'tests']),
-    packages=find_packages(),
+    packages=find_packages(exclude=['tests']),
 
     # Alternatively, if you want to distribute just a my_module.py, uncomment
     # this:
