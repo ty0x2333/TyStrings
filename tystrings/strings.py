@@ -14,8 +14,9 @@ class Strings(object):
         self.filename = os.path.join(target_dir if target_dir else '', STRING_FILE)
         self.__reference = {}
 
-    def generate(self, files):
-        self.update_reference()
+    def generate(self, files, update_reference=True):
+        if update_reference:
+            self.update_reference()
         script = 'genstrings'
         for filename in files:
             script += ' %s' % filename
