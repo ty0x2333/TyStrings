@@ -1,0 +1,3 @@
+#!/bin/sh
+current_dir=$(dirname $0)
+pip freeze > $current_dir/../requirements.txt
