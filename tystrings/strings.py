@@ -15,7 +15,7 @@ class Strings(object):
         self.__reference = {}
 
     def generate(self, files):
-        self.__generate_reference()
+        self.update_reference()
         script = 'genstrings'
         for filename in files:
             script += ' %s' % filename
@@ -36,7 +36,7 @@ class Strings(object):
 
         return process.returncode, output
 
-    def __generate_reference(self):
+    def update_reference(self):
         self.__reference = {}
         if os.path.exists(self.filename):
             f = codecs.open(self.filename, "r", encoding=self.encoding)
