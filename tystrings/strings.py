@@ -19,7 +19,7 @@ class Strings(object):
         script = 'genstrings'
         for filename in files:
             script += ' %s' % filename
-        self.__run_script('%s -o %s' % (script, self.__dir))
+        self.__run_script('%s -o %s' % (script, self.__dir if self.__dir else '.'))
         self.__translate()
 
     @staticmethod
