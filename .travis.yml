@@ -1,9 +1,9 @@
 sudo: false
 language: python
 os: osx
-python:
-  - "2.7"
-  - "3.2"
-  - "3.3"
-  - "3.4"
+#python:
+#  - "2.7"
+#  - "3.2"
+#  - "3.3"
+#  - "3.4"
 script: python setup.py nosetests
