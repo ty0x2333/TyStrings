@@ -1,5 +1,5 @@
 sudo: false
-language: python
+language: generic
 os: osx
 before_install:
   - brew update
