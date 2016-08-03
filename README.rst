@@ -1,6 +1,6 @@
 .. code-block::
 
-  _______     _____ _        _
+   _______     _____ _        _
   |__   __|   / ____| |      (_)
     | |_   _| (___ | |_ _ __ _ _ __   __ _ ___
     | | | | |\___ \| __| '__| | '_ \ / _` / __|
@@ -13,6 +13,8 @@
 
 strings file generation tool for iOS
 
+|build| |license|
+
 Installation
 ============
 
@@ -20,7 +22,7 @@ Installation
 
   $ sudo pip install tystrings
 
-Options
+Usage
 -------
 .. code-block:: bash
 
@@ -45,3 +47,12 @@ Options
       --version             show program's version number and exit
       -o DIR, --output DIR  place output files in 'dir'
       -v, --verbose         show more debugging information
+
+
+.. |license| image:: https://img.shields.io/github/license/luckytianyiyan/TyStrings.svg?maxAge=2592000
+   :target: LICENSE
+   :alt: MIT License
+
+.. |build| image:: https://img.shields.io/travis/luckytianyiyan/TyStrings.svg?maxAge=2592000
+  :target: https://travis-ci.org/luckytianyiyan/TyStrings
+  :alt: Continuous Integration
