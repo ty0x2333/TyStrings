@@ -8,8 +8,8 @@ from . import logger
 
 
 class Strings(object):
-    def __init__(self, target_dir, encoding='utf_16_le'):
-        self.__dir = os.path.abspath(target_dir)
+    def __init__(self, dst_dir, encoding='utf_16_le'):
+        self.destination = os.path.abspath(dst_dir)
         self.encoding = encoding
         self.__references = {}
 
@@ -24,14 +24,14 @@ class Strings(object):
         logger.debug('')
         for filename in os.listdir(temp_dir):
             logger.debug('generated %s' % filename)
-            reference = self.generate_reference(os.path.join(self.__dir, filename))
+            reference = self.generate_reference(os.path.join(self.destination, filename))
             self.__references[filename] = reference
         logger.done('Generated Reference')
         for k, v in self.__references.items():
             logger.info('%s count: %d' % (k, len(v)))
 
         for basename, ref in self.__references.items():
-            target_abspath = os.path.join(self.__dir, basename)
+            target_abspath = os.path.join(self.destination, basename)
             shutil.copy(os.path.join(temp_dir, basename), target_abspath)
             self.__translate(target_abspath, ref)
 
