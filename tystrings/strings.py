@@ -6,14 +6,11 @@ import tempfile
 import shutil
 from . import logger
 
-STRING_FILE = 'Localizable.strings'
-
 
 class Strings(object):
     def __init__(self, target_dir, encoding='utf_16_le'):
         self.__dir = target_dir
         self.encoding = encoding
-        self.filename = os.path.join(target_dir if target_dir else '', STRING_FILE)
         self.__references = {}
 
     def generate(self, files, update_reference=True):
