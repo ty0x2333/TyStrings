@@ -37,6 +37,23 @@ class Strings(object):
 
         return process.returncode, output
 
+    def generate_reference(self, filename):
+        """generate reference from strings file.
+        :param filename: .strings filename
+        :return: reference
+        """
+        reference = {}
+        if os.path.exists(filename):
+            f = codecs.open(filename, "r", encoding=self.encoding)
+            for line in f:
+                match = re.match(r'"(?P<key>.*?)" = "(?P<value>.*?)";', line)
+                if match is not None:
+                    key = match.group('key')
+                    value = match.group('value')
+                    reference[key] = value
+            f.close()
+        return reference
+
     def update_reference(self):
         self.__reference = {}
         if os.path.exists(self.filename):
