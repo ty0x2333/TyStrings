@@ -1,20 +1,19 @@
 import unittest
 from tystrings import *
+import shutil
 
 
 class StringsTest(unittest.TestCase):
     def setUp(self):
         logger.level = logging.DEBUG
         self.addCleanup(self.cleanup)
-        self.strings = Strings('')
-        if os.path.exists(self.strings.filename):
-            os.remove(self.strings.filename)
+        self.strings = Strings('tests/output')
 
     def test_generate(self):
-        self.strings.generate(['TyStringTest/TyStringTest/AppDelegate.m'])
-        self.assertTrue(os.path.exists(self.strings.filename))
+        self.strings.generate(['tests/example/IntegrationDemo.m'])
+        self.assertTrue(os.path.exists('tests/output/Localizable.strings'))
+        self.assertTrue(os.path.exists('tests/output/IntegrationTable.strings'))
 
     def cleanup(self):
-        if os.path.exists(self.strings.filename):
-            os.remove(self.strings.filename)
-
+        if os.path.exists(self.strings.destination):
+            shutil.rmtree(self.strings.destination)
