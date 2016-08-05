@@ -32,6 +32,9 @@ class Strings(object):
 
         for basename, ref in self.__references.items():
             target_abspath = os.path.join(self.destination, basename)
+            dirname = os.path.dirname(target_abspath)
+            if not os.path.exists(dirname):
+                os.mkdir(dirname)
             shutil.copy(os.path.join(temp_dir, basename), target_abspath)
             self.__translate(target_abspath, ref)
 
