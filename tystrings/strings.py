@@ -13,7 +13,10 @@ class Strings(object):
         self.encoding = encoding
         self.__references = {}
 
-    def generate(self, files, update_reference=True):
+    def generate(self, files):
+        """generate strings
+        :param files: input files
+        """
         script = 'genstrings'
         for filename in files:
             script += ' %s' % filename
