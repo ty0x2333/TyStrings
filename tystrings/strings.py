@@ -16,7 +16,9 @@ class Strings(object):
     def generate(self, files):
         """generate strings
         :param files: input files
+        :return generate strings dicts
         """
+        results = {}
         script = 'genstrings'
         for filename in files:
             script += ' %s' % filename
@@ -40,9 +42,10 @@ class Strings(object):
                 if not os.path.exists(dirname):
                     os.mkdir(dirname)
                 shutil.copy(os.path.join(temp_dir, basename), target_abspath)
-                self.__translate(target_abspath, ref)
+                results[basename] = self.__translate(target_abspath, ref)
         finally:
             shutil.rmtree(temp_dir)
+        return results
 
     @staticmethod
     def __run_script(script):
@@ -84,7 +87,13 @@ class Strings(object):
         return self.__references.keys()
 
     def __translate(self, dst, reference):
-        translated = {}
+        """translate strings file by reference
+        :param dst: destination strings file
+        :param reference: translation reference
+        :return: result dict
+        """
+        result = {}
+        translated = []
         try:
             f = codecs.open(dst, "r", encoding=self.encoding)
             lines = f.readlines()
@@ -92,26 +101,30 @@ class Strings(object):
                 match = re.match(r'"(?P<key>.*?)" = "(?P<value>.*?)";', line)
                 if match is not None:
                     key = match.group('key')
-                    result = reference.get(key, None)
+                    value = match.group('value')
+                    answer = reference.get(key, None)
 
-                    if result is not None:
-                        value = match.group('value')
+                    if answer is not None:
                         if reference[key] != value:
-                            line = '"%s" = "%s";\n' % (key, result)
+                            line = '"%s" = "%s";\n' % (key, answer)
                             lines[index] = line
-                            translated[key] = result
+                            translated.append(key)
+                        result[key] = answer
+                    else:
+                        result[key] = value
             f.close()
 
             logger.done('Translated: %s' % dst)
             logger.info('count: %d' % len(translated))
             logger.debug('')
-            for k in translated.keys():
-                logger.debug('%s => %s' % (k, translated[k]))
+            for k in translated:
+                logger.debug('%s => %s' % (k, result[k]))
 
             f = codecs.open(dst, "w+", encoding=self.encoding)
             f.writelines(lines)
             f.flush()
             f.close()
+            return result
             # logger.addition('Write strings file to: %s' % self.filename)
         except Exception as e:
             logger.error(e)
