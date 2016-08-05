@@ -67,7 +67,6 @@ class Strings(object):
         return reference
 
     def __translate(self, dst, reference):
-        sum = 0
         translated = {}
         try:
             f = codecs.open(dst, "r", encoding=self.encoding)
@@ -83,12 +82,11 @@ class Strings(object):
                         if reference[key] != value:
                             line = '"%s" = "%s";\n' % (key, result)
                             lines[index] = line
-                            sum += 1
                             translated[key] = result
             f.close()
 
             logger.done('Translated: %s' % dst)
-            logger.info('count: %d' % sum)
+            logger.info('count: %d' % len(translated))
             logger.debug('')
             for k in translated.keys():
                 logger.debug('%s => %s' % (k, translated[k]))
