@@ -72,6 +72,14 @@ class Strings(object):
             f.close()
         return reference
 
+    @property
+    def generated_filenames(self):
+        """generated strings files basenames
+        exp: 'Localizable.strings'
+        :return: strings filenames
+        """
+        return self.__references.keys()
+
     def __translate(self, dst, reference):
         translated = {}
         try:
