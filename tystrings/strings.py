@@ -20,23 +20,26 @@ class Strings(object):
 
         logger.done('Generated Strings')
         temp_dir = tempfile.mkdtemp()
-        self.__run_script('%s -o %s' % (script, temp_dir))
-        logger.debug('')
-        for filename in os.listdir(temp_dir):
-            logger.debug('generated %s' % filename)
-            reference = self.generate_reference(os.path.join(self.destination, filename))
-            self.__references[filename] = reference
-        logger.done('Generated Reference')
-        for k, v in self.__references.items():
-            logger.info('%s count: %d' % (k, len(v)))
+        try:
+            self.__run_script('%s -o %s' % (script, temp_dir))
+            logger.debug('')
+            for filename in os.listdir(temp_dir):
+                logger.debug('generated %s' % filename)
+                reference = self.generate_reference(os.path.join(self.destination, filename))
+                self.__references[filename] = reference
+            logger.done('Generated Reference')
+            for k, v in self.__references.items():
+                logger.info('%s count: %d' % (k, len(v)))
 
-        for basename, ref in self.__references.items():
-            target_abspath = os.path.join(self.destination, basename)
-            dirname = os.path.dirname(target_abspath)
-            if not os.path.exists(dirname):
-                os.mkdir(dirname)
-            shutil.copy(os.path.join(temp_dir, basename), target_abspath)
-            self.__translate(target_abspath, ref)
+            for basename, ref in self.__references.items():
+                target_abspath = os.path.join(self.destination, basename)
+                dirname = os.path.dirname(target_abspath)
+                if not os.path.exists(dirname):
+                    os.mkdir(dirname)
+                shutil.copy(os.path.join(temp_dir, basename), target_abspath)
+                self.__translate(target_abspath, ref)
+        finally:
+            shutil.rmtree(temp_dir)
 
     @staticmethod
     def __run_script(script):
