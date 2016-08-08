@@ -29,6 +29,7 @@ def arg_parser():
     parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter, description=description)
     parser.add_argument('--version', action='version', version=__version__)
     parser.add_argument('files', metavar='file', nargs='+', help='source file .[mc]')
+    parser.add_argument('-a', '--aliases', nargs='+', help='aliases')
     parser.add_argument('-o', '--output', dest='dir', help='place output files in \'dir\'')
     parser.add_argument('-v', '--verbose', action="store_true", dest="verbose", help="show more debugging information")
 
@@ -48,7 +49,7 @@ def main():
         if os.path.isdir(filename):
             parser.error('%s is a directory' % filename)
 
-    strings = Strings(args.dir)
+    strings = Strings(args.dir, aliases=args.aliases)
 
     strings.generate(args.files)
 
