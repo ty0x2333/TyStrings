@@ -1,7 +1,7 @@
 .. code-block::
 
-   _______     _____ _        _
-  |__   __|   / ____| |      (_)
+  _______     _____ _        _
+ |__   __|   / ____| |      (_)
     | |_   _| (___ | |_ _ __ _ _ __   __ _ ___
     | | | | |\___ \| __| '__| | '_ \ / _` / __|
     | | |_| |____) | |_| |  | | | | | (_| \__ \
@@ -13,7 +13,7 @@
 
 strings file generation tool for iOS
 
-|build| |license|
+|build| |coverage| |license|
 
 Installation
 ============
@@ -54,5 +54,9 @@ Usage
    :alt: MIT License
 
 .. |build| image:: https://img.shields.io/travis/luckytianyiyan/TyStrings.svg?maxAge=2592000
-  :target: https://travis-ci.org/luckytianyiyan/TyStrings
-  :alt: Continuous Integration
+   :target: https://travis-ci.org/luckytianyiyan/TyStrings
+   :alt: Continuous Integration
+
+.. |coverage| image:: https://coveralls.io/repos/github/luckytianyiyan/TyStrings/badge.svg
+   :target: https://coveralls.io/github/luckytianyiyan/TyStrings
+   :alt: Coverage Testing Results

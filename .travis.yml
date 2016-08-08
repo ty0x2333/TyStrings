@@ -7,4 +7,8 @@ before_install:
   - virtualenv venv -p python
   - source venv/bin/activate
   - pip install -r requirements.txt
-script: python setup.py nosetests
+script:
+  - python setup.py nosetests
+  - coverage report --show-missing
+after_success:
+  coveralls
