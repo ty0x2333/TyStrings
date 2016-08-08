@@ -8,10 +8,11 @@ from . import logger
 
 
 class Strings(object):
-    def __init__(self, dst_dir, encoding='utf_16_le'):
+    def __init__(self, dst_dir, encoding='utf_16_le', aliases=None):
         self.destination = os.path.abspath(dst_dir)
         self.encoding = encoding
         self.__references = {}
+        self.aliases = aliases if aliases else []
 
     def generate(self, files):
         """generate strings
@@ -22,6 +23,11 @@ class Strings(object):
         script = 'genstrings'
         for filename in files:
             script += ' %s' % filename
+
+        if len(self.aliases) > 0:
+            script += ' -s'
+            for alias in self.aliases:
+                script += ' %s' % alias
 
         logger.done('Generated Strings')
         temp_dir = tempfile.mkdtemp()
@@ -81,7 +87,7 @@ class Strings(object):
     @property
     def generated_filenames(self):
         """generated strings files basenames
-        exp: 'Localizable.strings'
+        e.g.: 'Localizable.strings'
         :return: strings filenames
         """
         return self.__references.keys()
