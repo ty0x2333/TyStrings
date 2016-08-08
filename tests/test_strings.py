@@ -25,6 +25,13 @@ class StringsTest(unittest.TestCase):
         self.assertTrue('Define.localizedString.define.2' in keys)
         self.assertTrue('Define.localizedString' in keys)
 
+    def test_function(self):
+        strings = Strings('tests/output/function', aliases=['LocalizedFunctionDemoString'])
+        results = strings.generate(['tests/example/FunctionDemo.m'])
+        keys = results['Localizable.strings'].keys()
+        self.assertTrue('Function.localizedString.function' in keys)
+        self.assertTrue('Function.localizedString' in keys)
+
     # def cleanup(self):
     #     dst = os.path.abspath('tests/output')
     #     if os.path.exists(dst):
