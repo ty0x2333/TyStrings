@@ -13,7 +13,7 @@
 
 strings file generation tool for iOS
 
-|build| |coverage| |license|
+|pypi| |build| |coverage| |license|
 
 Installation
 ============
@@ -51,6 +51,9 @@ Usage
    -o DIR, --output DIR  place output files in 'dir'
    -v, --verbose         show more debugging information
 
+.. |pypi| image:: https://img.shields.io/pypi/v/TyStrings.svg?maxAge=2592000
+   :target: https://pypi.python.org/pypi/TyStrings
+   :alt: Python Package Index
 
 .. |license| image:: https://img.shields.io/github/license/luckytianyiyan/TyStrings.svg?maxAge=2592000
    :target: LICENSE
