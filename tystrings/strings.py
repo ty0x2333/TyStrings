@@ -76,7 +76,7 @@ class Strings(object):
         if os.path.exists(filename):
             f = codecs.open(filename, "r", encoding=self.encoding)
             for line in f:
-                match = re.match(r'"(?P<key>.*?)" = "(?P<value>.*?)";', line)
+                match = re.match(r'"(?P<key>.*?)"\s*=\s*"(?P<value>.*?)";', line)
                 if match is not None:
                     key = match.group('key')
                     value = match.group('value')
