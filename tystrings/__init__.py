@@ -5,7 +5,7 @@ import os
 import logging
 from . import tylogger
 __author__ = 'luckytianyiyan@gmail.com'
-__version__ = '0.1.1'
+__version__ = '0.2.0'
 
 
 logging.setLoggerClass(tylogger.TyLogger)
