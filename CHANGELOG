@@ -1,0 +1,7 @@
+0.2.0
+---
+1. fixed cli crash when encoding is not `UTF-16`
+2. fixed generate strings error.
+  － The first line of the file is not processed.
+  － The lines that are in the format of chaos is not processed.
+3. cli add `--utf8` option
