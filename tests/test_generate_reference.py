@@ -10,6 +10,11 @@ class GenerateReferenceTest(unittest.TestCase):
         reference = self.strings.generate_reference('tests/example/strings/base.strings')
         self.assertDictEqual(reference, self._reference(2))
 
+    def test_utf8(self):
+        self.strings.encoding = 'utf8'
+        reference = self.strings.generate_reference('tests/example/strings/utf8.strings')
+        self.assertDictEqual(reference, self._reference(2))
+
     def test_space(self):
         reference = self.strings.generate_reference('tests/example/strings/space.strings')
         self.assertDictEqual(reference, self._reference(4))
