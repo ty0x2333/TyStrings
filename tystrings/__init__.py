@@ -49,7 +49,7 @@ def main():
         if os.path.isdir(filename):
             parser.error('%s is a directory' % filename)
 
-    strings = Strings(args.dir, aliases=args.aliases)
+    strings = Strings(args.dir if args.dir else '.', aliases=args.aliases)
 
     strings.generate(args.files)
 
