@@ -75,7 +75,7 @@ class Strings(object):
         reference = {}
         if os.path.exists(filename):
             f = codecs.open(filename, "r", encoding=self.encoding)
-            prog = re.compile(r"\"(?P<key>.*?)\"\s*=\s*\"(?P<value>.*?)\";")
+            prog = re.compile(r"\s*\"(?P<key>.*?)\"\s*=\s*\"(?P<value>.*?)\"\s*;")
             lines = f.readlines()
             for line in lines:
                 match = prog.match(line)

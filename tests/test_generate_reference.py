@@ -12,7 +12,7 @@ class GenerateReferenceTest(unittest.TestCase):
 
     def test_space(self):
         reference = self.strings.generate_reference('tests/example/strings/space.strings')
-        self.assertDictEqual(reference, self._reference(3))
+        self.assertDictEqual(reference, self._reference(4))
 
     def test_comment(self):
         reference = self.strings.generate_reference('tests/example/strings/comment.strings')
