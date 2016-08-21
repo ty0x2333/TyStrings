@@ -32,6 +32,7 @@ def arg_parser():
     parser.add_argument('-a', '--aliases', nargs='+', help='aliases')
     parser.add_argument('-o', '--output', dest='dir', help='place output files in \'dir\'')
     parser.add_argument('-v', '--verbose', action="store_true", dest="verbose", help="show more debugging information")
+    parser.add_argument('--utf8', action="store_true", dest="utf8", help="read files use encoding UTF-8")
 
     return parser
 
@@ -50,6 +51,9 @@ def main():
             parser.error('%s is a directory' % filename)
 
     strings = Strings(args.dir if args.dir else '.', aliases=args.aliases)
+
+    if args.utf8:
+        strings.encoding = 'utf8'
 
     strings.generate(args.files)
 
