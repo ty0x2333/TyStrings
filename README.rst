@@ -51,6 +51,13 @@ Usage
    -o DIR, --output DIR  place output files in 'dir'
    -v, --verbose         show more debugging information
 
+To run genstrings over all .m files in your project, you can invoke it, for example, like this:
+
+.. code-block:: bash
+
+  find . -name *.m | xargs tystrings -o en.lproj
+
+
 .. |pypi| image:: https://img.shields.io/pypi/v/TyStrings.svg?maxAge=2592000
    :target: https://pypi.python.org/pypi/TyStrings
    :alt: Python Package Index

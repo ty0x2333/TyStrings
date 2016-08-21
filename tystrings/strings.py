@@ -6,9 +6,11 @@ import tempfile
 import shutil
 from . import logger
 
+DEFAULT_ENCODING = 'utf16'
+
 
 class Strings(object):
-    def __init__(self, dst_dir, encoding='utf_16_le', aliases=None):
+    def __init__(self, dst_dir, encoding=DEFAULT_ENCODING, aliases=None):
         self.destination = os.path.abspath(dst_dir)
         self.encoding = encoding
         self.__references = {}
@@ -75,8 +77,10 @@ class Strings(object):
         reference = {}
         if os.path.exists(filename):
             f = codecs.open(filename, "r", encoding=self.encoding)
-            for line in f:
-                match = re.match(r'"(?P<key>.*?)" = "(?P<value>.*?)";', line)
+            prog = re.compile(r"\s*\"(?P<key>.*?)\"\s*=\s*\"(?P<value>.*?)\"\s*;")
+            lines = f.readlines()
+            for line in lines:
+                match = prog.match(line)
                 if match is not None:
                     key = match.group('key')
                     value = match.group('value')
@@ -101,7 +105,7 @@ class Strings(object):
         result = {}
         translated = []
         try:
-            f = codecs.open(dst, "r", encoding=self.encoding)
+            f = codecs.open(dst, "r", DEFAULT_ENCODING)
             lines = f.readlines()
             for (index, line) in enumerate(lines):
                 match = re.match(r'"(?P<key>.*?)" = "(?P<value>.*?)";', line)
