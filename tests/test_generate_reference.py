@@ -14,6 +14,10 @@ class GenerateReferenceTest(unittest.TestCase):
         reference = self.strings.generate_reference('tests/example/strings/space.strings')
         self.assertDictEqual(reference, self._reference(3))
 
+    def test_comment(self):
+        reference = self.strings.generate_reference('tests/example/strings/comment.strings')
+        self.assertDictEqual(reference, self._reference(3))
+
     @staticmethod
     def _reference(count):
         reference = {}

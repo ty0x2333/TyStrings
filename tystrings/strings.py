@@ -8,7 +8,7 @@ from . import logger
 
 
 class Strings(object):
-    def __init__(self, dst_dir, encoding='utf_16_le', aliases=None):
+    def __init__(self, dst_dir, encoding='utf16', aliases=None):
         self.destination = os.path.abspath(dst_dir)
         self.encoding = encoding
         self.__references = {}
@@ -75,8 +75,10 @@ class Strings(object):
         reference = {}
         if os.path.exists(filename):
             f = codecs.open(filename, "r", encoding=self.encoding)
-            for line in f:
-                match = re.match(r'"(?P<key>.*?)"\s*=\s*"(?P<value>.*?)";', line)
+            prog = re.compile(r"\"(?P<key>.*?)\"\s*=\s*\"(?P<value>.*?)\";")
+            lines = f.readlines()
+            for line in lines:
+                match = prog.match(line)
                 if match is not None:
                     key = match.group('key')
                     value = match.group('value')
