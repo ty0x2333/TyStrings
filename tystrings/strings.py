@@ -29,7 +29,7 @@ class Strings(object):
 
         for filename in os.listdir(self.temp_dir):
             logger.debug('generated %s' % filename)
-            reference = self.generate_reference(os.path.join(dst_dir, filename))
+            reference = self.parsing(os.path.join(dst_dir, filename), encoding=self.encoding)
             self.__references[filename] = reference
         logger.done('Generated Reference')
         for k, v in self.__references.items():
@@ -82,14 +82,16 @@ class Strings(object):
 
         return process.returncode, output
 
-    def generate_reference(self, filename):
-        """generate reference from strings file.
+    @staticmethod
+    def parsing(filename, encoding=DEFAULT_ENCODING):
+        """parsing `.strings` file.
         :param filename: .strings filename
+        :param encoding: file encoding
         :return: reference
         """
         reference = {}
         if os.path.exists(filename):
-            f = codecs.open(filename, "r", encoding=self.encoding)
+            f = codecs.open(filename, "r", encoding=encoding)
             prog = re.compile(r"\s*\"(?P<key>.*?)\"\s*=\s*\"(?P<value>.*?)\"\s*;")
             lines = f.readlines()
             for line in lines:

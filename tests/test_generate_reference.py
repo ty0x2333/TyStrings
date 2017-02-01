@@ -7,20 +7,19 @@ class GenerateReferenceTest(unittest.TestCase):
         self.strings = Strings('tests/output/generate')
 
     def test_base(self):
-        reference = self.strings.generate_reference('tests/example/strings/base.strings')
+        reference = Strings.parsing('tests/example/strings/base.strings')
         self.assertDictEqual(reference, self._reference(2))
 
     def test_utf8(self):
-        self.strings.encoding = 'utf8'
-        reference = self.strings.generate_reference('tests/example/strings/utf8.strings')
+        reference = Strings.parsing('tests/example/strings/utf8.strings', encoding='utf8')
         self.assertDictEqual(reference, self._reference(2))
 
     def test_space(self):
-        reference = self.strings.generate_reference('tests/example/strings/space.strings')
+        reference = Strings.parsing('tests/example/strings/space.strings')
         self.assertDictEqual(reference, self._reference(4))
 
     def test_comment(self):
-        reference = self.strings.generate_reference('tests/example/strings/comment.strings')
+        reference = Strings.parsing('tests/example/strings/comment.strings')
         self.assertDictEqual(reference, self._reference(3))
 
     @staticmethod
