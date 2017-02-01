@@ -36,3 +36,7 @@ class TyLogger(logging.Logger):
     def finished(self, return_code, *args, **kwargs):
         self.debug(BEER_EMOJI + ' process finished with %s' % ('success' if
                    return_code == 0 or return_code is None else ('exit code %r' % return_code)), *args, **kwargs)
+
+logging.setLoggerClass(TyLogger)
+
+logger = logging.getLogger('tystrings')

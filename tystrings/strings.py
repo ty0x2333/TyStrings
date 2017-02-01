@@ -4,7 +4,7 @@ import codecs
 import subprocess
 import tempfile
 import shutil
-from . import logger
+from .tylogger import logger
 
 DEFAULT_ENCODING = 'utf16'
 
