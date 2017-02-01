@@ -51,13 +51,12 @@ def main():
             parser.error('%s is a directory' % filename)
 
     dsts = args.destinations if args.destinations else ["."]
+
+    strings = Strings(aliases=args.aliases)
+    if args.utf8:
+        strings.encoding = 'utf8'
     for dst in dsts:
-        strings = Strings(dst, aliases=args.aliases)
-
-        if args.utf8:
-            strings.encoding = 'utf8'
-
-        strings.generate(args.files)
+        strings.generate(files=args.files, dst=dst)
 
     logger.success('have fun!')
 

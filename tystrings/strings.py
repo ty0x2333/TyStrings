@@ -10,32 +10,33 @@ DEFAULT_ENCODING = 'utf16'
 
 
 class Strings(object):
-    def __init__(self, dst_dir, encoding=DEFAULT_ENCODING, aliases=None):
-        self.destination = os.path.abspath(dst_dir)
+    def __init__(self, encoding=DEFAULT_ENCODING, aliases=None):
         self.encoding = encoding
         self.__references = {}
         self.aliases = aliases if aliases else []
         self.temp_dir = None
 
-    def generate(self, files):
+    def generate(self, files, dst):
         """generate strings
+        :param dst: destination directory
         :param files: input files
         :return generate strings dicts
         """
+        dst_dir = os.path.abspath(dst)
         results = {}
         if self.temp_dir is None:
             self.__generate_strings_temp_file(files)
 
         for filename in os.listdir(self.temp_dir):
             logger.debug('generated %s' % filename)
-            reference = self.generate_reference(os.path.join(self.destination, filename))
+            reference = self.generate_reference(os.path.join(dst_dir, filename))
             self.__references[filename] = reference
         logger.done('Generated Reference')
         for k, v in self.__references.items():
             logger.info('%s count: %d' % (k, len(v)))
 
         for basename, ref in self.__references.items():
-            target_abspath = os.path.join(self.destination, basename)
+            target_abspath = os.path.join(dst_dir, basename)
             dirname = os.path.dirname(target_abspath)
             if not os.path.exists(dirname):
                 os.makedirs(dirname)
@@ -45,8 +46,7 @@ class Strings(object):
         return results
 
     def __generate_strings_temp_file(self, source_files):
-        """
-        run `genstrings` script. generate `.strings` files to a temp directory.
+        """run `genstrings` script. generate `.strings` files to a temp directory.
         :param source_files: input files
         :return: temp directory
         """
