@@ -28,3 +28,6 @@ class BaiduTranslator(object):
         for trans in trans_results:
             result[trans['src']] = trans['dst']
         return result
+
+    def translate_list(self, questions, dst_lang, src_lang='auto'):
+        return self.translate('\n'.join(questions), dst_lang, src_lang)
