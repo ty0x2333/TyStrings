@@ -6,9 +6,10 @@ BEER_EMOJI = u'\U0001F37A '
 BEERS_EMOJI = u'\U0001F37B '
 
 # Log Level
-DONE = 11
-SUCCESS = 12
-ADDITION = 13
+PROCESS = 11
+DONE = 12
+SUCCESS = 13
+ADDITION = 14
 
 
 class TyLogger(logging.Logger):
@@ -23,6 +24,9 @@ class TyLogger(logging.Logger):
         handler.setFormatter(TyFormatter())
         self.addHandler(handler)
         self.setLevel(logging.INFO)
+
+    def process(self, msg, *args, **kwargs):
+        self._log(PROCESS, msg, args, **kwargs)
 
     def done(self, msg, *args, **kwargs):
         self._log(DONE, msg, args, **kwargs)

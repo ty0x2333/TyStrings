@@ -25,7 +25,9 @@ class Strings(object):
         dst_dir = os.path.abspath(dst)
         results = {}
         if self.temp_dir is None:
+            logger.process('Generating Strings...')
             self.__generate_strings_temp_file(files)
+            logger.done('Generated Strings')
 
         for filename in os.listdir(self.temp_dir):
             logger.debug('generated %s' % filename)
@@ -62,7 +64,6 @@ class Strings(object):
         temp_dir = tempfile.mkdtemp()
         self.__run_script('%s -o %s' % (script, temp_dir))
         self.temp_dir = temp_dir
-        logger.done('Generated Strings')
         return temp_dir
 
     def __del__(self):
@@ -143,7 +144,6 @@ class Strings(object):
 
             logger.done('Translated: %s' % dst)
             logger.info('count: %d' % len(translated))
-            logger.debug('')
             for k in translated:
                 logger.debug('%s => %s' % (k, result[k]))
 
