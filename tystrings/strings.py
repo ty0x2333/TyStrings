@@ -41,7 +41,7 @@ class Strings(object):
             if not os.path.exists(dirname):
                 os.makedirs(dirname)
             shutil.copy(os.path.join(self.temp_dir, basename), target_abspath)
-            results[basename] = self.__translate(target_abspath, ref)
+            results[basename] = self.translate(target_abspath, ref, self.encoding)
 
         return results
 
@@ -111,10 +111,12 @@ class Strings(object):
         """
         return self.__references.keys()
 
-    def __translate(self, dst, reference):
+    @staticmethod
+    def translate(dst, reference, encoding=DEFAULT_ENCODING):
         """translate strings file by reference
         :param dst: destination strings file
         :param reference: translation reference
+        :param encoding: file encoding
         :return: result dict
         """
         result = {}
@@ -145,7 +147,7 @@ class Strings(object):
             for k in translated:
                 logger.debug('%s => %s' % (k, result[k]))
 
-            f = codecs.open(dst, "w+", encoding=self.encoding)
+            f = codecs.open(dst, "w+", encoding=encoding)
             f.writelines(lines)
             f.flush()
             f.close()
