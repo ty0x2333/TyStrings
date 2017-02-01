@@ -115,6 +115,7 @@ setup(
     entry_points={
         'console_scripts': [
             'tystrings=tystrings.cli:main',
+            'tytranslate=tystrings.cli:translate'
         ],
     },
 )
