@@ -5,3 +5,11 @@
   － The first line of the file is not processed.
   － The lines that are in the format of chaos is not processed.
 3. cli add `--utf8` option
+
+1.0.0
+---
+#### Enhancement
+1. support multiple destination
+  ```
+  -o DESTINATIONS [DESTINATIONS ...]
+  ```
