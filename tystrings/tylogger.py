@@ -4,6 +4,7 @@ from colorama import Fore
 # Emoji
 BEER_EMOJI = u'\U0001F37A '
 BEERS_EMOJI = u'\U0001F37B '
+GHOST_EMOJI = u'\U0001F47B  '
 
 # Log Level
 PROCESS = 11
