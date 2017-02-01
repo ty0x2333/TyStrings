@@ -5,7 +5,7 @@ import os
 import logging
 from . import tylogger
 __author__ = 'luckytianyiyan@gmail.com'
-__version__ = '0.2.0'
+__version__ = '1.0.0-dev'
 
 
 logging.setLoggerClass(tylogger.TyLogger)
@@ -30,7 +30,7 @@ def arg_parser():
     parser.add_argument('--version', action='version', version=__version__)
     parser.add_argument('files', metavar='file', nargs='+', help='source file .[mc]')
     parser.add_argument('-a', '--aliases', nargs='+', help='aliases')
-    parser.add_argument('-o', '--output', dest='dir', help='place output files in \'dir\'')
+    parser.add_argument('-o', '--output', nargs='+', dest='destinations', help='place output files in dirs')
     parser.add_argument('-v', '--verbose', action="store_true", dest="verbose", help="show more debugging information")
     parser.add_argument('--utf8', action="store_true", dest="utf8", help="read files use encoding UTF-8")
 
@@ -50,12 +50,14 @@ def main():
         if os.path.isdir(filename):
             parser.error('%s is a directory' % filename)
 
-    strings = Strings(args.dir if args.dir else '.', aliases=args.aliases)
+    dsts = args.destinations if args.destinations else ["."]
+    for dst in dsts:
+        strings = Strings(dst, aliases=args.aliases)
 
-    if args.utf8:
-        strings.encoding = 'utf8'
+        if args.utf8:
+            strings.encoding = 'utf8'
 
-    strings.generate(args.files)
+        strings.generate(args.files)
 
     logger.success('have fun!')
 

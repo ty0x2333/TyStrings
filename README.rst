@@ -55,7 +55,7 @@ To run genstrings over all .m files in your project, you can invoke it, for exam
 
 .. code-block:: bash
 
-  find . -name *.m | xargs tystrings -o en.lproj
+  tystrings $(find . -name \*.m) -o en.lproj
 
 
 .. |pypi| image:: https://img.shields.io/pypi/v/TyStrings.svg?maxAge=2592000
