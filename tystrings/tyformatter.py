@@ -1,21 +1,14 @@
 import logging
 import tylogger
-
-# Colors
-BLUE = '\033[1;94m'
-GREEN = '\033[1;92m'
-HIGH_LIGHT = '\033[1;97m'
-RED = '\033[1;91m'
-YELLOW = '\033[1;93m'
-ENDC = '\033[0m'
+from colorama import Fore
 
 
 class TyFormatter(logging.Formatter):
-    ERROR_FORMAT = RED + 'Error' + ENDC + ': %(message)s'
-    WARNING_FORMAT = YELLOW + 'Warning' + ENDC + ': %(message)s'
-    STEP_FORMAT = '==> ' + HIGH_LIGHT + '%(message)s' + ENDC
-    DONE_FORMAT = BLUE + STEP_FORMAT
-    ADDITION_FORMAT = GREEN + STEP_FORMAT
+    ERROR_FORMAT = Fore.LIGHTRED_EX + 'Error' + Fore.RESET + ': %(message)s'
+    WARNING_FORMAT = Fore.LIGHTYELLOW_EX + 'Warning' + Fore.RESET + ': %(message)s'
+    STEP_FORMAT = '==> ' + Fore.LIGHTWHITE_EX + '%(message)s' + Fore.RESET
+    DONE_FORMAT = Fore.LIGHTBLUE_EX + STEP_FORMAT
+    ADDITION_FORMAT = Fore.LIGHTGREEN_EX + STEP_FORMAT
 
     def __init__(self, fmt=None, datefmt=None):
         logging.Formatter.__init__(self, fmt=fmt, datefmt=datefmt)

@@ -1,4 +1,5 @@
 from .tyformatter import *
+from colorama import Fore
 
 # Emoji
 BEER_EMOJI = u'\U0001F37A '
@@ -27,10 +28,10 @@ class TyLogger(logging.Logger):
         self._log(DONE, msg, args, **kwargs)
 
     def success(self, msg, *args, **kwargs):
-        self._log(SUCCESS, BEERS_EMOJI + ' ' + HIGH_LIGHT + msg + ENDC, args, **kwargs)
+        self._log(SUCCESS, BEERS_EMOJI + ' ' + Fore.LIGHTWHITE_EX + msg + Fore.RESET, args, **kwargs)
 
     def addition(self, msg, *args, **kwargs):
-        self._log(ADDITION, BEERS_EMOJI + ' ' + HIGH_LIGHT + msg + ENDC, args, **kwargs)
+        self._log(ADDITION, BEERS_EMOJI + ' ' + Fore.LIGHTWHITE_EX + msg + Fore.RESET, args, **kwargs)
 
     def finished(self, return_code, *args, **kwargs):
         self.debug(BEER_EMOJI + ' process finished with %s' % ('success' if
