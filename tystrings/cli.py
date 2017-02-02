@@ -7,6 +7,14 @@ from .strings import Strings
 from .translator import Translator
 
 
+def parent_paser():
+    parser = argparse.ArgumentParser(add_help=False)
+    parser.add_argument('-v', '--verbose', action="store_true", dest="verbose", help="show more debugging information")
+    parser.add_argument('--version', action='version', version=__version__)
+    parser.add_argument('--utf8', action="store_true", dest="utf8", help="use encoding UTF-8")
+    return parser
+
+
 def arg_parser():
     description = r"""
   _______     _____ _        _
@@ -18,14 +26,10 @@ def arg_parser():
         __/ |                         __/ |
        |___/                         |___/
     """
-    parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter, description=description)
-    parser.add_argument('--version', action='version', version=__version__)
+    parser = argparse.ArgumentParser(parents=[parent_paser()], formatter_class=argparse.RawDescriptionHelpFormatter, description=description)
     parser.add_argument('files', metavar='file', nargs='+', help='source file .[mc]')
     parser.add_argument('-a', '--aliases', nargs='+', help='aliases')
     parser.add_argument('-o', '--output', nargs='+', dest='destinations', help='place output files in dirs')
-    parser.add_argument('-v', '--verbose', action="store_true", dest="verbose", help="show more debugging information")
-    parser.add_argument('--utf8', action="store_true", dest="utf8", help="read files use encoding UTF-8")
-
     return parser
 
 
@@ -54,14 +58,11 @@ def main():
 
 
 def translate_arg_parser():
-    parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser = argparse.ArgumentParser(parents=[parent_paser()], formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument('source', help='source `.strings` file')
     parser.add_argument('destination', help='destination, a file or directory')
     parser.add_argument('--dst-lang', required=True, help='destination language')
-    parser.add_argument('--version', action='version', version=__version__)
     parser.add_argument('-s', '--src-lang', help='source language')
-    parser.add_argument('-v', '--verbose', action="store_true", dest="verbose", help="show more debugging information")
-    parser.add_argument('--utf8', action="store_true", dest="utf8", help="use encoding UTF-8")
     return parser
 
 
