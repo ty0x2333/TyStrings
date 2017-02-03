@@ -8,8 +8,11 @@
 
 1.0.0
 ---
+#### Feature
+1. add `translate` subcommand
 #### Enhancement
 1. support multiple destination
   ```
   -o DESTINATIONS [DESTINATIONS ...]
   ```
+2. tystrings as subcommand 'tystrings generate'

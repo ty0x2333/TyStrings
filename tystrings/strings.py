@@ -25,7 +25,9 @@ class Strings(object):
         dst_dir = os.path.abspath(dst)
         results = {}
         if self.temp_dir is None:
+            logger.process('Generating Strings...')
             self.__generate_strings_temp_file(files)
+            logger.done('Generated Strings')
 
         for filename in os.listdir(self.temp_dir):
             logger.debug('generated %s' % filename)
@@ -41,7 +43,7 @@ class Strings(object):
             if not os.path.exists(dirname):
                 os.makedirs(dirname)
             shutil.copy(os.path.join(self.temp_dir, basename), target_abspath)
-            results[basename] = self.__translate(target_abspath, ref)
+            results[basename] = self.translate(target_abspath, ref, self.encoding)
 
         return results
 
@@ -62,7 +64,6 @@ class Strings(object):
         temp_dir = tempfile.mkdtemp()
         self.__run_script('%s -o %s' % (script, temp_dir))
         self.temp_dir = temp_dir
-        logger.done('Generated Strings')
         return temp_dir
 
     def __del__(self):
@@ -111,10 +112,12 @@ class Strings(object):
         """
         return self.__references.keys()
 
-    def __translate(self, dst, reference):
+    @staticmethod
+    def translate(dst, reference, encoding=DEFAULT_ENCODING):
         """translate strings file by reference
         :param dst: destination strings file
         :param reference: translation reference
+        :param encoding: file encoding
         :return: result dict
         """
         result = {}
@@ -141,11 +144,10 @@ class Strings(object):
 
             logger.done('Translated: %s' % dst)
             logger.info('count: %d' % len(translated))
-            logger.debug('')
             for k in translated:
                 logger.debug('%s => %s' % (k, result[k]))
 
-            f = codecs.open(dst, "w+", encoding=self.encoding)
+            f = codecs.open(dst, "w+", encoding=encoding)
             f.writelines(lines)
             f.flush()
             f.close()

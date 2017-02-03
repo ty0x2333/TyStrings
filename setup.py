@@ -29,9 +29,9 @@ setup(
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version=__import__('tystrings').__version__,
+    version=__import__('tystrings.version').__version__,
 
-    description='strings file generation tool for iOS',
+    description='strings file generation / translation tool for iOS',
     long_description=long_description,
 
     # The project's main homepage.
@@ -50,7 +50,7 @@ setup(
         #   3 - Alpha
         #   4 - Beta
         #   5 - Production/Stable
-        'Development Status :: 5 - Production/Stable',
+        'Development Status :: 4 - Beta',
 
         # Indicate who your project is intended for
         'Intended Audience :: Developers',
@@ -85,7 +85,7 @@ setup(
     # your project is installed. For an analysis of "install_requires" vs pip's
     # requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
-    install_requires=['colorama>=0.3.7'],
+    install_requires=['colorama>=0.3.7', 'requests>=2.11.0'],
 
     # List additional groups of dependencies here (e.g. development
     # dependencies). You can install these using the following syntax,
