@@ -11,7 +11,7 @@
 
 
 
-strings file generation tool for iOS
+strings file generation / translation tool for iOS
 
 |pypi| |build| |coverage| |license|
 

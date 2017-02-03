@@ -31,7 +31,7 @@ setup(
     # https://packaging.python.org/en/latest/single_source_version.html
     version=__import__('tystrings.version').__version__,
 
-    description='strings file generation tool for iOS',
+    description='strings file generation / translation tool for iOS',
     long_description=long_description,
 
     # The project's main homepage.
