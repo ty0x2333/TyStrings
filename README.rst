@@ -46,7 +46,7 @@ Usage
     subcommands:
       {generate,translate}
         generate            generate `.strings` file from source code files.
-        translate           use Baidu Translate Service to translate strings file.
+        translate           using Baidu Translate Service to translate `.strings` file.
 
 To run tystrings over all .m files in your project, you can invoke it, for example, like this:
 
@@ -54,7 +54,7 @@ To run tystrings over all .m files in your project, you can invoke it, for examp
 
   tystrings generate $(find . -name \*.m) -o en.lproj zh.lprog -v
 
-translate .strings file to other language:
+translate .strings file to another language:
 
 .. code-block:: bash
 

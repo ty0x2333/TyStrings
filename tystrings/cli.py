@@ -36,7 +36,7 @@ def arg_parser():
     generate_parser.add_argument('-o', '--output', nargs='+', dest='destinations', help='place output files in dirs')
 
     translate_parser = subparsers.add_parser('translate', parents=[parent_paser()],
-                                             help='use Baidu Translate Service to translate strings file.')
+                                             help='using Baidu Translate Service to translate `.strings` file.')
     translate_parser.add_argument('source', help='source `.strings` file')
     translate_parser.add_argument('destination', help='destination, a file or directory')
     translate_parser.add_argument('--dst-lang', required=True, help='destination language')
