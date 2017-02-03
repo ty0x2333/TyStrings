@@ -67,7 +67,8 @@ class Strings(object):
         return temp_dir
 
     def __del__(self):
-        shutil.rmtree(self.temp_dir, ignore_errors=True)
+        if self.temp_dir:
+            shutil.rmtree(self.temp_dir, ignore_errors=True)
 
     @staticmethod
     def __run_script(script):
