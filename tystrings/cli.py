@@ -1,7 +1,7 @@
 import argparse
 import os
 import logging
-from . import __version__
+from .version import __version__
 from .tylogger import logger
 from .strings import Strings
 from .translator import Translator

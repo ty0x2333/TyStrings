@@ -29,7 +29,7 @@ setup(
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version=__import__('tystrings').__version__,
+    version=__import__('tystrings.version').__version__,
 
     description='strings file generation tool for iOS',
     long_description=long_description,
