@@ -27,7 +27,7 @@ class Translator(object):
 
         logger.process('Translating...')
         diff_reference_keys = list(set(reference) - set(dst_reference))
-
+        logger.info('total number of words: %s' % len(diff_reference_keys))
         if not diff_reference_keys:
             logger.warning(GHOST_EMOJI + 'There is no need for translation.')
             return
@@ -44,5 +44,8 @@ class Translator(object):
                     reference[k] = d
                     logger.info('key: %s, value %s translate to %s' % (k, s, d))
 
+        dirname = os.path.dirname(dst_abspath)
+        if not os.path.exists(dirname):
+            os.makedirs(dirname)
         shutil.copy(self.file, dst_abspath)
         Strings.translate(dst_abspath, reference)
