@@ -4,26 +4,56 @@ import codecs
 import subprocess
 import tempfile
 import shutil
-from . import logger
+from .tylogger import logger
 
 DEFAULT_ENCODING = 'utf16'
 
 
 class Strings(object):
-    def __init__(self, dst_dir, encoding=DEFAULT_ENCODING, aliases=None):
-        self.destination = os.path.abspath(dst_dir)
+    def __init__(self, encoding=DEFAULT_ENCODING, aliases=None):
         self.encoding = encoding
         self.__references = {}
         self.aliases = aliases if aliases else []
+        self.temp_dir = None
 
-    def generate(self, files):
+    def generate(self, files, dst):
         """generate strings
+        :param dst: destination directory
         :param files: input files
         :return generate strings dicts
         """
+        dst_dir = os.path.abspath(dst)
         results = {}
+        if self.temp_dir is None:
+            logger.process('Generating Strings...')
+            self.__generate_strings_temp_file(files)
+            logger.done('Generated Strings')
+
+        for filename in os.listdir(self.temp_dir):
+            logger.debug('generated %s' % filename)
+            reference = self.parsing(os.path.join(dst_dir, filename), encoding=self.encoding)
+            self.__references[filename] = reference
+        logger.done('Generated Reference')
+        for k, v in self.__references.items():
+            logger.info('%s count: %d' % (k, len(v)))
+
+        for basename, ref in self.__references.items():
+            target_abspath = os.path.join(dst_dir, basename)
+            dirname = os.path.dirname(target_abspath)
+            if not os.path.exists(dirname):
+                os.makedirs(dirname)
+            shutil.copy(os.path.join(self.temp_dir, basename), target_abspath)
+            results[basename] = self.translate(target_abspath, ref, self.encoding)
+
+        return results
+
+    def __generate_strings_temp_file(self, source_files):
+        """run `genstrings` script. generate `.strings` files to a temp directory.
+        :param source_files: input files
+        :return: temp directory
+        """
         script = 'genstrings'
-        for filename in files:
+        for filename in source_files:
             script += ' %s' % filename
 
         if len(self.aliases) > 0:
@@ -31,29 +61,13 @@ class Strings(object):
             for alias in self.aliases:
                 script += ' %s' % alias
 
-        logger.done('Generated Strings')
         temp_dir = tempfile.mkdtemp()
-        try:
-            self.__run_script('%s -o %s' % (script, temp_dir))
-            logger.debug('')
-            for filename in os.listdir(temp_dir):
-                logger.debug('generated %s' % filename)
-                reference = self.generate_reference(os.path.join(self.destination, filename))
-                self.__references[filename] = reference
-            logger.done('Generated Reference')
-            for k, v in self.__references.items():
-                logger.info('%s count: %d' % (k, len(v)))
+        self.__run_script('%s -o %s' % (script, temp_dir))
+        self.temp_dir = temp_dir
+        return temp_dir
 
-            for basename, ref in self.__references.items():
-                target_abspath = os.path.join(self.destination, basename)
-                dirname = os.path.dirname(target_abspath)
-                if not os.path.exists(dirname):
-                    os.makedirs(dirname)
-                shutil.copy(os.path.join(temp_dir, basename), target_abspath)
-                results[basename] = self.__translate(target_abspath, ref)
-        finally:
-            shutil.rmtree(temp_dir)
-        return results
+    def __del__(self):
+        shutil.rmtree(self.temp_dir, ignore_errors=True)
 
     @staticmethod
     def __run_script(script):
@@ -69,14 +83,16 @@ class Strings(object):
 
         return process.returncode, output
 
-    def generate_reference(self, filename):
-        """generate reference from strings file.
+    @staticmethod
+    def parsing(filename, encoding=DEFAULT_ENCODING):
+        """parsing `.strings` file.
         :param filename: .strings filename
+        :param encoding: file encoding
         :return: reference
         """
         reference = {}
         if os.path.exists(filename):
-            f = codecs.open(filename, "r", encoding=self.encoding)
+            f = codecs.open(filename, "r", encoding=encoding)
             prog = re.compile(r"\s*\"(?P<key>.*?)\"\s*=\s*\"(?P<value>.*?)\"\s*;")
             lines = f.readlines()
             for line in lines:
@@ -96,10 +112,12 @@ class Strings(object):
         """
         return self.__references.keys()
 
-    def __translate(self, dst, reference):
+    @staticmethod
+    def translate(dst, reference, encoding=DEFAULT_ENCODING):
         """translate strings file by reference
         :param dst: destination strings file
         :param reference: translation reference
+        :param encoding: file encoding
         :return: result dict
         """
         result = {}
@@ -126,11 +144,10 @@ class Strings(object):
 
             logger.done('Translated: %s' % dst)
             logger.info('count: %d' % len(translated))
-            logger.debug('')
             for k in translated:
                 logger.debug('%s => %s' % (k, result[k]))
 
-            f = codecs.open(dst, "w+", encoding=self.encoding)
+            f = codecs.open(dst, "w+", encoding=encoding)
             f.writelines(lines)
             f.flush()
             f.close()

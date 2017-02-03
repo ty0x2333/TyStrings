@@ -2,8 +2,8 @@ sudo: false
 language: generic
 os: osx
 before_install:
-  - brew update
-  - brew install python
+  # - brew update
+  # - brew install python
   - virtualenv venv -p python
   - source venv/bin/activate
   - pip install -r requirements.txt

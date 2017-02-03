@@ -5,12 +5,13 @@ import shutil
 
 class StringsTest(unittest.TestCase):
     def setUp(self):
-        logger.level = logging.DEBUG
+        pass
+        # logger.level = logging.DEBUG
         # self.addCleanup(self.cleanup)
 
     def test_generate(self):
-        strings = Strings('tests/output/generate')
-        strings.generate(['tests/example/IntegrationDemo.m'])
+        strings = Strings()
+        strings.generate(['tests/example/IntegrationDemo.m'], dst='tests/output/generate')
         filenames = strings.generated_filenames
         self.assertTrue('Localizable.strings' in filenames)
         self.assertTrue('IntegrationTable.strings' in filenames)
@@ -18,16 +19,16 @@ class StringsTest(unittest.TestCase):
         self.assertTrue(os.path.exists('tests/output/generate/IntegrationTable.strings'))
 
     def test_define(self):
-        strings = Strings('tests/output/define', aliases=['LOCALIZED', 'LOCALIZED_2'])
-        results = strings.generate(['tests/example/DefineDemo.m'])
+        strings = Strings(aliases=['LOCALIZED', 'LOCALIZED_2'])
+        results = strings.generate(['tests/example/DefineDemo.m'], 'tests/output/define')
         keys = results['Localizable.strings'].keys()
         self.assertTrue('Define.localizedString.define' in keys)
         self.assertTrue('Define.localizedString.define.2' in keys)
         self.assertTrue('Define.localizedString' in keys)
 
     def test_function(self):
-        strings = Strings('tests/output/function', aliases=['LocalizedFunctionDemoString'])
-        results = strings.generate(['tests/example/FunctionDemo.m'])
+        strings = Strings(aliases=['LocalizedFunctionDemoString'])
+        results = strings.generate(['tests/example/FunctionDemo.m'], 'tests/output/function')
         keys = results['Localizable.strings'].keys()
         self.assertTrue('Function.localizedString.function' in keys)
         self.assertTrue('Function.localizedString' in keys)
