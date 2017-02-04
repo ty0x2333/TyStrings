@@ -20,7 +20,9 @@ class ParsingTest(unittest.TestCase):
 
     def test_space(self):
         result = Strings.parsing('tests/example/strings/space.strings')
-        self.assertDictEqual(result, self._result(4))
+        right_answer = self._result(4)
+        right_answer['parsing.test.4'] = 'Test4\nTest4\nTest4Test4Test4\nTest4\n'
+        self.assertDictEqual(result, right_answer)
 
     @staticmethod
     def _result(count):
