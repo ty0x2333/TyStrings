@@ -1,6 +1,7 @@
 import argparse
 import os
 import logging
+import collections
 from .version import __version__
 from .tylogger import logger
 from .strings import Strings
@@ -41,6 +42,10 @@ def arg_parser():
     translate_parser.add_argument('destination', help='destination, a file or directory')
     translate_parser.add_argument('--dst-lang', required=True, help='destination language')
     translate_parser.add_argument('-s', '--src-lang', help='source language')
+
+    lint_parser = subparsers.add_parser('lint', parents=[parent_paser()],
+                                             help='Validates a .strings file.')
+    lint_parser.add_argument('file', help='`.strings` file')
     return parser
 
 
@@ -55,6 +60,8 @@ def main():
         generate(args=args, parser=parser)
     elif args.action == 'translate':
         translate(args=args)
+    elif args.action == 'lint':
+        lint(args=args, parser=parser)
 
 
 def generate(args, parser):
@@ -78,3 +85,24 @@ def translate(args):
     translator = Translator(args.source, lang=args.src_lang)
     translator.translate(args.destination, dst_lang=args.dst_lang)
     logger.success('have fun!')
+
+
+def lint(args, parser):
+    if not os.path.exists(args.file):
+        parser.error('\'%s\' not exists' % args.file)
+    logger.process('Parsing Source Reference...')
+    elems = Strings.parsing_elems(filename=args.file, encoding='utf8' if args.utf8 else None)
+    logger.process('Check duplicates...')
+    keys = [e[0] for e in elems]
+    duplicates = []
+    for item, count in collections.Counter(keys).items():
+        if count > 1:
+            duplicates.append((item, count))
+
+    if duplicates:
+        logger.info('Find the following:')
+        for key, count in duplicates:
+            logger.info('%s count: %d' % (key, count))
+            for elem in elems:
+                if elem[0] == key:
+                    logger.info('%s:%d', args.file, elem[2])
