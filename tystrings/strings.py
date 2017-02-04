@@ -93,16 +93,13 @@ class Strings(object):
         """
         reference = {}
         if os.path.exists(filename):
-            f = codecs.open(filename, "r", encoding=encoding)
-            prog = re.compile(r"\s*\"(?P<key>.*?)\"\s*=\s*\"(?P<value>.*?)\"\s*;")
-            lines = f.readlines()
-            for line in lines:
-                match = prog.match(line)
-                if match is not None:
-                    key = match.group('key')
-                    value = match.group('value')
-                    reference[key] = value
-            f.close()
+            with codecs.open(filename, mode='r', encoding=encoding) as f:
+                contents = f.read()
+            prog = re.compile(r"\s*\"(?P<key>.*?)\"\s*=\s*\"(?P<value>[\s\S]*?)\"\s*;")
+            for match in prog.finditer(contents):
+                key = match.group('key')
+                value = match.group('value')
+                reference[key] = value
         return reference
 
     @property
