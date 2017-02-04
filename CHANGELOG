@@ -6,7 +6,7 @@
   － The lines that are in the format of chaos is not processed.
 3. cli add `--utf8` option
 
-1.0.0
+1.0.1
 ---
 #### Feature
 1. add `translate` subcommand
@@ -16,3 +16,16 @@
   -o DESTINATIONS [DESTINATIONS ...]
   ```
 2. tystrings as subcommand 'tystrings generate'
+
+1.1.0
+---
+#### Bug Fixed
+1. Parser Error [issue #1](https://github.com/luckytianyiyan/TyStrings/issues/1)
+    ```
+    /* No comment provided by engineer. */
+    "parsing.test.4"  ="Test4
+    Test4
+    Test4Test4Test4
+    Test4
+    ";
+    ```
