@@ -22,6 +22,14 @@ class CLIBaseTest(unittest.TestCase):
         self.assertEqual(0, self.call('-h'))
         self.assertEqual(0, self.call('--version'))
 
+    def test_diff(self):
+        subcommand = 'diff'
+        self.assertEqual(0, self.call(subcommand, '-h'))
+
+        file1 = os.path.abspath('tests/example/strings/diff1.strings')
+        file2 = os.path.abspath('tests/example/strings/diff2.strings')
+        self.assertEqual(0, self.call(subcommand, file1, file2, '-v'))
+
     def test_lint(self):
         subcommand = 'lint'
         self.assertEqual(0, self.call(subcommand, '-h'))

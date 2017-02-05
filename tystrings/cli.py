@@ -57,6 +57,12 @@ def arg_parser():
     lint_parser = subparsers.add_parser('lint', parents=[parent_parser()],
                                         help='Validates a `.strings` file.')
     lint_parser.add_argument('file', help='`.strings` file', type=extant_file)
+
+    diff_parser = subparsers.add_parser('diff', parents=[parent_parser()],
+                                        help='Compare `.strings` files line by line.')
+    diff_parser.add_argument('file1', type=extant_file)
+    diff_parser.add_argument('file2', type=extant_file)
+    diff_parser.add_argument('-k', '--only-key', action="store_true", help="Only keys are compared")
     return parser
 
 
@@ -73,6 +79,8 @@ def main(argv=None):
         translate(args=args)
     elif args.action == 'lint':
         lint(args=args)
+    elif args.action == 'diff':
+        diff(args=args)
 
     exit(0)
 
@@ -117,6 +125,26 @@ def lint(args):
         exit(1)
 
     logger.success('lint success')
+
+
+def diff(args):
+    def __generator(elems1, elems2, only_key, prefix):
+        for elem in elems1:
+            if not next((e for e in elems2 if e[0] == elem[0] and (only_key or e[1] == elem[1])), False):
+                yield (prefix, elem[2], '', elem[0], elem[1])
+
+    encoding = 'utf8' if args.utf8 else None
+    logger.process('Parsing File1 Reference...')
+    file1_elems = Strings.parsing_elems(filename=args.file1, encoding=encoding)
+    logger.process('Parsing File2 Reference...')
+    file2_elems = Strings.parsing_elems(filename=args.file2, encoding=encoding)
+    logger.process('Comparing...')
+
+    diff_adds = list(__generator(file1_elems, file2_elems, args.only_key, '+'))
+    diff_subs = list(__generator(file2_elems, file1_elems, args.only_key, '-'))
+    diffs = diff_adds + diff_subs
+    diffs.sort(key=lambda obj: obj[1] if obj[1] else obj[2])
+    logger.diffs(diffs)
 
 
 if __name__ == '__main__':
