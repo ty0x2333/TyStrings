@@ -11,7 +11,7 @@ DEFAULT_ENCODING = 'utf16'
 
 class Strings(object):
     def __init__(self, encoding=DEFAULT_ENCODING, aliases=None):
-        self.encoding = encoding
+        self.encoding = encoding if encoding else DEFAULT_ENCODING
         self.__references = {}
         self.aliases = aliases if aliases else []
         self.temp_dir = None
