@@ -6,6 +6,7 @@ from .version import __version__
 from .tylogger import logger
 from .strings import Strings
 from .translator import Translator
+from tabulate import tabulate
 
 
 def parent_paser():
@@ -92,17 +93,26 @@ def lint(args, parser):
         parser.error('\'%s\' not exists' % args.file)
     logger.process('Parsing Source Reference...')
     elems = Strings.parsing_elems(filename=args.file, encoding='utf8' if args.utf8 else None)
-    logger.process('Check duplicates...')
-    keys = [e[0] for e in elems]
+    logger.process('Check Duplicate Keys...')
     duplicates = []
-    for item, count in collections.Counter(keys).items():
+    for item, count in collections.Counter([e[0] for e in elems]).items():
         if count > 1:
             duplicates.append((item, count))
 
-    if duplicates:
-        logger.info('Find the following:')
-        for key, count in duplicates:
-            logger.info('%s count: %d' % (key, count))
-            for elem in elems:
-                if elem[0] == key:
-                    logger.info('%s:%d', args.file, elem[2])
+    if not duplicates:
+        logger.success('lint success')
+        exit(0)
+
+    table = []
+    table_file = []
+    logger.info('Find the following:')
+    for key, count in duplicates:
+        table.append([key, count])
+        for elem in elems:
+            if elem[0] == key:
+                table_file.append([elem[2], elem[0], elem[1]])
+    logger.info(tabulate(table, headers=['Key', 'Count'], showindex='always', tablefmt="orgtbl"))
+    logger.debug('Detail:')
+    logger.debug(tabulate(table_file, headers=['Line', 'Key', 'Value'], tablefmt="orgtbl"))
+    logger.error('Duplicate Keys')
+    exit(1)
