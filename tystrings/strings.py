@@ -91,16 +91,30 @@ class Strings(object):
         :param encoding: file encoding
         :return: reference
         """
-        reference = {}
+        reference = dict((elem[0], elem[1]) for elem in Strings.__reference_generator(filename, encoding))
+        return reference
+
+    @staticmethod
+    def parsing_elems(filename, encoding=DEFAULT_ENCODING):
+        return list(Strings.__reference_generator(filename, encoding))
+
+    @staticmethod
+    def __reference_generator(filename, encoding=DEFAULT_ENCODING):
         if os.path.exists(filename):
-            with codecs.open(filename, mode='r', encoding=encoding) as f:
-                contents = f.read()
-            prog = re.compile(r"\s*\"(?P<key>.*?)\"\s*=\s*\"(?P<value>[\s\S]*?)\"\s*;")
+            line_end = [0]
+            contents = ''
+            with codecs.open(filename, mode='r', encoding=encoding if encoding else DEFAULT_ENCODING) as f:
+                for line in f.readlines():
+                    contents += line
+                    line_end.append(len(contents))
+            prog = re.compile(r"\s*\"(?P<key>.*?)\"\s*=\s*\"(?P<value>[\s\S]*?)\"\s*;", re.MULTILINE)
             for match in prog.finditer(contents):
                 key = match.group('key')
+                key_start = match.start('key')
                 value = match.group('value')
-                reference[key] = value
-        return reference
+                match.groupdict()
+                line_no = next(i for i in range(len(line_end)) if line_end[i] > key_start)
+                yield (key, value, line_no)
 
     @property
     def generated_filenames(self):
