@@ -17,15 +17,12 @@ def parent_parser():
 
 
 def extant_file(x):
-    """
-    'Type' for argparse - checks that file exists but does not open.
-
-    http://stackoverflow.com/questions/11540854/file-as-command-line-argument-for-argparse-error-message-if-argument-is-not-va
-    """
     if not os.path.exists(x):
         # Argparse uses the ArgumentTypeError to give a rejection message like:
         # error: argument input: x does not exist
         raise argparse.ArgumentTypeError("{0} does not exist".format(x))
+    elif os.path.isdir(x):
+        raise argparse.ArgumentTypeError("{0} is a directory".format(x))
     return x
 
 
@@ -46,7 +43,7 @@ def arg_parser():
 
     generate_parser = subparsers.add_parser('generate', parents=[parent_parser()],
                                             help='generate `.strings` file from source code files.')
-    generate_parser.add_argument('files', metavar='file', nargs='+', help='source file .[mc]')
+    generate_parser.add_argument('files', metavar='file', nargs='+', help='source file .[mc]', type=extant_file)
     generate_parser.add_argument('-a', '--aliases', nargs='+', help='aliases')
     generate_parser.add_argument('-o', '--output', nargs='+', dest='destinations', help='place output files in dirs')
 
@@ -71,7 +68,7 @@ def main(argv=None):
         logger.setLevel(logging.DEBUG)
 
     if args.action == 'generate':
-        generate(args=args, parser=parser)
+        generate(args=args)
     elif args.action == 'translate':
         translate(args=args)
     elif args.action == 'lint':
@@ -80,13 +77,7 @@ def main(argv=None):
     exit(0)
 
 
-def generate(args, parser):
-    for filename in args.files:
-        if not os.path.exists(filename):
-            parser.error('\'%s\' not exists' % filename)
-        elif os.path.isdir(filename):
-            parser.error('\'%s\' is a directory' % filename)
-
+def generate(args):
     dsts = args.destinations if args.destinations else ["."]
 
     strings = Strings(aliases=args.aliases, encoding=args.utf8)
