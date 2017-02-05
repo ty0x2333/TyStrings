@@ -99,23 +99,23 @@ def lint(args, parser):
         if count > 1:
             duplicates.append((item, count))
 
-    if not duplicates:
-        logger.success('lint success')
-        exit(0)
+    if duplicates:
+        table = []
+        table_file = []
+        logger.info('Find the following:')
+        for key, count in duplicates:
+            table.append([key, count])
+            for elem in elems:
+                if elem[0] == key:
+                    table_file.append([elem[2], elem[0], elem[1]])
+        logger.info(tabulate(table, headers=['Key', 'Count'], showindex='always', tablefmt="orgtbl"))
+        logger.debug('Detail:')
+        logger.debug(tabulate(table_file, headers=['Line', 'Key', 'Value'], tablefmt="orgtbl"))
+        logger.error('Duplicate Keys')
+        exit(1)
 
-    table = []
-    table_file = []
-    logger.info('Find the following:')
-    for key, count in duplicates:
-        table.append([key, count])
-        for elem in elems:
-            if elem[0] == key:
-                table_file.append([elem[2], elem[0], elem[1]])
-    logger.info(tabulate(table, headers=['Key', 'Count'], showindex='always', tablefmt="orgtbl"))
-    logger.debug('Detail:')
-    logger.debug(tabulate(table_file, headers=['Line', 'Key', 'Value'], tablefmt="orgtbl"))
-    logger.error('Duplicate Keys')
-    exit(1)
+    logger.success('lint success')
+
 
 if __name__ == '__main__':
     main()
