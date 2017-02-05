@@ -45,7 +45,7 @@ def arg_parser():
     translate_parser.add_argument('-s', '--src-lang', help='source language')
 
     lint_parser = subparsers.add_parser('lint', parents=[parent_paser()],
-                                             help='Validates a .strings file.')
+                                             help='Validates a `.strings` file.')
     lint_parser.add_argument('file', help='`.strings` file')
     return parser
 
