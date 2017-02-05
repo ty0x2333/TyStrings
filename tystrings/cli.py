@@ -64,6 +64,8 @@ def main(argv=None):
     elif args.action == 'lint':
         lint(args=args, parser=parser)
 
+    exit(0)
+
 
 def generate(args, parser):
     for filename in args.files:
@@ -74,9 +76,7 @@ def generate(args, parser):
 
     dsts = args.destinations if args.destinations else ["."]
 
-    strings = Strings(aliases=args.aliases)
-    if args.utf8:
-        strings.encoding = 'utf8'
+    strings = Strings(aliases=args.aliases, encoding=args.utf8)
     for dst in dsts:
         strings.generate(files=args.files, dst=dst)
     logger.success('have fun!')
