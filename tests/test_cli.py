@@ -73,8 +73,8 @@ class CLITests(CLIBaseTest):
     def call(self, *new_args, **kwargs):
         with tempfile.TemporaryFile() as out:
             args = (sys.executable, '-m', 'tystrings.cli') + new_args
-            # return subprocess.call(args, stdout=out, stderr=out, cwd=self.cwd, **kwargs)
-            return subprocess.call(args, cwd=self.cwd, **kwargs)
+            return subprocess.call(args, stdout=out, stderr=out, cwd=self.cwd, **kwargs)
+            # return subprocess.call(args, cwd=self.cwd, **kwargs)
 
 
 class CLIWhiteTests(CLIBaseTest):
