@@ -50,9 +50,9 @@ def arg_parser():
     return parser
 
 
-def main():
+def main(argv=None):
     parser = arg_parser()
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
 
     if args.verbose:
         logger.setLevel(logging.DEBUG)
@@ -116,3 +116,6 @@ def lint(args, parser):
     logger.debug(tabulate(table_file, headers=['Line', 'Key', 'Value'], tablefmt="orgtbl"))
     logger.error('Duplicate Keys')
     exit(1)
+
+if __name__ == '__main__':
+    main()
