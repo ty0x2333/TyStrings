@@ -16,6 +16,19 @@ def parent_parser():
     return parser
 
 
+def extant_file(x):
+    """
+    'Type' for argparse - checks that file exists but does not open.
+
+    http://stackoverflow.com/questions/11540854/file-as-command-line-argument-for-argparse-error-message-if-argument-is-not-va
+    """
+    if not os.path.exists(x):
+        # Argparse uses the ArgumentTypeError to give a rejection message like:
+        # error: argument input: x does not exist
+        raise argparse.ArgumentTypeError("{0} does not exist".format(x))
+    return x
+
+
 def arg_parser():
     description = r"""
   _______     _____ _        _
@@ -45,8 +58,8 @@ def arg_parser():
     translate_parser.add_argument('-s', '--src-lang', help='source language')
 
     lint_parser = subparsers.add_parser('lint', parents=[parent_parser()],
-                                             help='Validates a `.strings` file.')
-    lint_parser.add_argument('file', help='`.strings` file')
+                                        help='Validates a `.strings` file.')
+    lint_parser.add_argument('file', help='`.strings` file', type=extant_file)
     return parser
 
 
@@ -62,7 +75,7 @@ def main(argv=None):
     elif args.action == 'translate':
         translate(args=args)
     elif args.action == 'lint':
-        lint(args=args, parser=parser)
+        lint(args=args)
 
     exit(0)
 
@@ -88,9 +101,7 @@ def translate(args):
     logger.success('have fun!')
 
 
-def lint(args, parser):
-    if not os.path.exists(args.file):
-        parser.error('\'%s\' not exists' % args.file)
+def lint(args):
     logger.process('Parsing Source Reference...')
     elems = Strings.parsing_elems(filename=args.file, encoding='utf8' if args.utf8 else None)
     logger.process('Check Duplicate Keys...')
