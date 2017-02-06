@@ -96,7 +96,14 @@ def generate(args):
 
 def translate(args):
     translator = Translator(args.source, lang=args.src_lang)
-    translator.translate(args.destination, dst_lang=args.dst_lang)
+    translateds = translator.translate(args.destination, dst_lang=args.dst_lang)
+    rows = []
+    for k in translateds.keys():
+        (s, d) = translateds[k]
+        rows.append([k, s, d])
+    if rows:
+        logger.done('Finished')
+        logger.info(tabulate(rows, headers=['Key', 'Value', 'Result']))
     logger.success('have fun!')
 
 
