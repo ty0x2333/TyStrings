@@ -16,6 +16,7 @@ class Translator(object):
         self.encoding = encoding
 
     def translate(self, dst, dst_lang):
+        translateds = {}
         dst_abspath = os.path.abspath(dst)
         logger.process('Parsing Source Reference...')
         reference = Strings.parsing(self.file, self.encoding)
@@ -30,7 +31,7 @@ class Translator(object):
         logger.info('total number of words: %s' % len(diff_reference_keys))
         if not diff_reference_keys:
             logger.warning(GHOST_EMOJI + 'There is no need for translation.')
-            return
+            return translateds
 
         diff_reference = []
         for k in diff_reference_keys:
@@ -42,10 +43,11 @@ class Translator(object):
             for k in diff_reference_keys:
                 if reference[k] == s:
                     reference[k] = d
-                    logger.info('key: %s, value %s translate to %s' % (k, s, d))
+                    translateds[k] = (s, d)
 
         dirname = os.path.dirname(dst_abspath)
         if not os.path.exists(dirname):
             os.makedirs(dirname)
         shutil.copy(self.file, dst_abspath)
         Strings.translate(dst_abspath, reference)
+        return translateds
