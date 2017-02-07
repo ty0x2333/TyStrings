@@ -11,7 +11,7 @@
 
 
 
-strings file generation / translation tool for iOS
+strings file tool for iOS / macOS developers
 
 |pypi| |build| |coverage| |license|
 
@@ -57,25 +57,25 @@ To run `tystrings generate` over all .m files in your project, you can invoke it
 
 .. code-block:: bash
 
-  tystrings generate $(find . -name \*.m) -o en.lproj zh-Hans.lprog -v
+  $ tystrings generate $(find . -name \*.m) -o en.lproj zh-Hans.lprog -v
 
 translate `.strings` file to another language:
 
 .. code-block:: bash
 
-  tystrings translate en.lproj/Localizable.strings zh-Hans.lproj/Localizable.strings --src-lang en --dst-lang zh
+  $ tystrings translate en.lproj/Localizable.strings zh-Hans.lproj/Localizable.strings --src-lang en --dst-lang zh
 
 validates `.strings` file:
 
 .. code-block:: bash
 
-  tystrings lint en.lproj/Localizable.strings
+  $ tystrings lint en.lproj/Localizable.strings
 
 compare two `.strings` files:
 
 .. code-block:: bash
 
-  tystrings diff Localizable1.strings Localizable2.strings
+  $ tystrings diff Localizable1.strings Localizable2.strings
 
 .. |pypi| image:: https://img.shields.io/pypi/v/TyStrings.svg?maxAge=2592000
    :target: https://pypi.python.org/pypi/TyStrings
