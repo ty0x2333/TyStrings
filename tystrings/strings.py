@@ -11,7 +11,7 @@ DEFAULT_ENCODING = 'utf16'
 
 class Strings(object):
     def __init__(self, encoding=DEFAULT_ENCODING, aliases=None):
-        self.encoding = encoding
+        self.encoding = encoding if encoding else DEFAULT_ENCODING
         self.__references = {}
         self.aliases = aliases if aliases else []
         self.temp_dir = None
@@ -91,19 +91,30 @@ class Strings(object):
         :param encoding: file encoding
         :return: reference
         """
-        reference = {}
-        if os.path.exists(filename):
-            f = codecs.open(filename, "r", encoding=encoding)
-            prog = re.compile(r"\s*\"(?P<key>.*?)\"\s*=\s*\"(?P<value>.*?)\"\s*;")
-            lines = f.readlines()
-            for line in lines:
-                match = prog.match(line)
-                if match is not None:
-                    key = match.group('key')
-                    value = match.group('value')
-                    reference[key] = value
-            f.close()
+        reference = dict((elem[0], elem[1]) for elem in Strings.__reference_generator(filename, encoding))
         return reference
+
+    @staticmethod
+    def parsing_elems(filename, encoding=DEFAULT_ENCODING):
+        return list(Strings.__reference_generator(filename, encoding))
+
+    @staticmethod
+    def __reference_generator(filename, encoding=DEFAULT_ENCODING):
+        if os.path.exists(filename):
+            line_end = [0]
+            contents = ''
+            with codecs.open(filename, mode='r', encoding=encoding if encoding else DEFAULT_ENCODING) as f:
+                for line in f.readlines():
+                    contents += line
+                    line_end.append(len(contents))
+            prog = re.compile(r"\s*\"(?P<key>.*?)\"\s*=\s*\"(?P<value>[\s\S]*?)\"\s*;", re.MULTILINE)
+            for match in prog.finditer(contents):
+                key = match.group('key')
+                key_start = match.start('key')
+                value = match.group('value')
+                match.groupdict()
+                line_no = next(i for i in range(len(line_end)) if line_end[i] > key_start)
+                yield (key, value, line_no)
 
     @property
     def generated_filenames(self):

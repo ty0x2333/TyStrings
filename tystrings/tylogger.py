@@ -1,5 +1,6 @@
 from .tyformatter import *
-from colorama import Fore
+from colorama import Fore, Style
+from tabulate import tabulate
 
 # Emoji
 BEER_EMOJI = u'\U0001F37A '
@@ -41,6 +42,16 @@ class TyLogger(logging.Logger):
     def finished(self, return_code, *args, **kwargs):
         self.debug(BEER_EMOJI + ' process finished with %s' % ('success' if
                    return_code == 0 or return_code is None else ('exit code %r' % return_code)), *args, **kwargs)
+
+    def diffs(self, diffs, *args, **kwargs):
+        def __coloring(elem, color):
+            return tuple(['%s%s%s' % (color, item, Style.RESET_ALL)
+                          for item in list(elem)])
+        rows = [__coloring(item, Fore.LIGHTGREEN_EX if item[0] == '+' else Fore.LIGHTRED_EX) for item in diffs]
+        self.info(tabulate(rows,
+                           tablefmt="psql", headers=['', 'File1', 'File2', 'Key', 'Value']), *args, **kwargs)
+
+
 
 logging.setLoggerClass(TyLogger)
 
