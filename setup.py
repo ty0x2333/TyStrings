@@ -17,10 +17,21 @@ from setuptools import setup, find_packages
 # To use a consistent encoding
 from codecs import open
 from os import path
+import sys
+import subprocess
 import re
 
-here = path.abspath(path.dirname(__file__))
+if not sys.platform == 'darwin':
+    sys.exit("Sorry, %s is not supported (yet)" % sys.platform)
 
+try:
+    subprocess.call(['genstrings'])
+except OSError:
+    sys.exit("require genstrings \n"
+             "https://developer.apple.com/legacy/library/documentation/Darwin/Reference/ManPages/man1/genstrings.1.html"
+             )
+
+here = path.abspath(path.dirname(__file__))
 
 with open(path.join(here, 'tystrings/version.py'), encoding='utf8') as version_file:
     version_match = re.search(r"^__version__ = ['\"]([^'\"]*)['\"]", version_file.read(), re.M)
