@@ -29,3 +29,9 @@
     Test4
     ";
     ```
+2. add `lint` subcommand
+
+  Validates a `.strings` file.
+3. add `diff` subcommand
+
+  Compare `.strings` files line by line.
