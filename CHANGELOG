@@ -26,6 +26,7 @@
 2. add `diff` subcommand
 
   Compare `.strings` files line by line.
+
 #### Bug Fixed
 1. Parser Error [issue #1](https://github.com/luckytianyiyan/TyStrings/issues/1)
     ```
