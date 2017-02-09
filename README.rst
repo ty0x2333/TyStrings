@@ -93,6 +93,6 @@ compare two `.strings` files:
    :target: https://coveralls.io/github/luckytianyiyan/TyStrings
    :alt: Coverage Testing Results
 
-.. |screenshot| image:: resource/tystrings.gif
-   :target: resource/tystrings.gif
+.. |screenshot| image:: https://raw.githubusercontent.com/luckytianyiyan/TyStrings/master/resource/tystrings.gif
+   :target: https://raw.githubusercontent.com/luckytianyiyan/TyStrings/master/resource/tystrings.gif
    :alt: TyStrings Screenshot
