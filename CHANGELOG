@@ -37,3 +37,9 @@
     Test4
     ";
     ```
+
+1.1.1
+---
+#### Bug Fixed
+1. Baidu Translator Encode Error
+2. Translator Incremental Updates Error
