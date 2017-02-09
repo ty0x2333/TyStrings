@@ -47,6 +47,7 @@ class Translator(object):
         dirname = os.path.dirname(dst_abspath)
         if not os.path.exists(dirname):
             os.makedirs(dirname)
+        if not os.path.exists(dst_abspath):
             shutil.copy(self.file, dst_abspath)
         Strings.translate(dst_abspath, dst_reference)
         return translateds
