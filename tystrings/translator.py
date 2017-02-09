@@ -21,7 +21,7 @@ class Translator(object):
         logger.process('Parsing Source Reference...')
         reference = Strings.parsing(self.file, self.encoding)
         logger.process('Parsing Destination Reference...')
-        dst_reference = Strings.parsing(dst_abspath, self.encoding)
+        dst_reference = {k: v for k, v in Strings.parsing(dst_abspath, self.encoding).items() if k != v}
         # for test, from Baidu Translate Open API Demo
         appid = '20151113000005349'
         secretKey = 'osubCEzlGjzvw8qdQc41'
@@ -42,12 +42,11 @@ class Translator(object):
         for s, d in result.items():
             for k in diff_reference_keys:
                 if reference[k] == s:
-                    reference[k] = d
+                    dst_reference[k] = d
                     translateds[k] = (s, d)
-
         dirname = os.path.dirname(dst_abspath)
         if not os.path.exists(dirname):
             os.makedirs(dirname)
-        shutil.copy(self.file, dst_abspath)
-        Strings.translate(dst_abspath, reference)
+            shutil.copy(self.file, dst_abspath)
+        Strings.translate(dst_abspath, dst_reference)
         return translateds
