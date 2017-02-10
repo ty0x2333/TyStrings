@@ -138,7 +138,10 @@ def diff(args):
     def __generator(elems1, elems2, only_key, prefix):
         for elem in elems1:
             if not next((e for e in elems2 if e[0] == elem[0] and (only_key or e[1] == elem[1])), False):
-                yield (prefix, elem[2], '', elem[0], elem[1])
+                if prefix == '+':
+                    yield (prefix, elem[2], '', elem[0], elem[1])
+                else:
+                    yield (prefix, '', elem[2], elem[0], elem[1])
 
     encoding = 'utf8' if args.utf8 else None
     logger.process('Parsing File1 Reference...')
