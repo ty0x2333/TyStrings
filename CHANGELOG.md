@@ -68,3 +68,11 @@
   | -  |         |       2 | diff.test.0 | Test    |
   +----+---------+---------+-------------+---------+
   ```
+
+1.2.0
+---
+#### Feature
+1. `translate` subcommand add `--appid` and `--secret`
+
+#### Bug Fixed
+1. Translate Error
