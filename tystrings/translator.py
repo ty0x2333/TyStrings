@@ -10,10 +10,12 @@ logging.getLogger("requests").setLevel(logger.level)
 
 
 class Translator(object):
-    def __init__(self, source, lang='auto', encoding=DEFAULT_ENCODING):
+    def __init__(self, source, app_id, secret_key, lang='auto', encoding=DEFAULT_ENCODING):
         self.file = os.path.abspath(source)
         self.language = lang
         self.encoding = encoding
+        self.app_id = app_id
+        self.secret_key = secret_key
 
     def translate(self, dst, dst_lang):
         translateds = {}
@@ -22,9 +24,6 @@ class Translator(object):
         reference = Strings.parsing(self.file, self.encoding)
         logger.process('Parsing Destination Reference...')
         dst_reference = {k: v for k, v in Strings.parsing(dst_abspath, self.encoding).items() if k != v}
-        # for test, from Baidu Translate Open API Demo
-        appid = '20151113000005349'
-        secretKey = 'osubCEzlGjzvw8qdQc41'
 
         logger.process('Translating...')
         diff_reference_keys = list(set(reference) - set(dst_reference))
@@ -37,7 +36,7 @@ class Translator(object):
         for k in diff_reference_keys:
             diff_reference.append(reference[k])
         logger.process('Translating by Baidu Translator...')
-        translator = BaiduTranslator(appid, secretKey)
+        translator = BaiduTranslator(self.app_id, self.secret_key)
         result = translator.translate_list(diff_reference, dst_lang=dst_lang, src_lang=self.language)
         for s, d in result.items():
             for k in diff_reference_keys:
