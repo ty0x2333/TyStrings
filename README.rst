@@ -13,7 +13,7 @@
 
 strings file tool for iOS / macOS developers
 
-|pypi| |build| |coverage| |license|
+|pypi| |build| |coverage| |license| |codebeat|
 
 |screenshot|
 
@@ -96,3 +96,6 @@ compare two `.strings` files:
 .. |screenshot| image:: https://raw.githubusercontent.com/luckytianyiyan/TyStrings/master/resource/tystrings.gif
    :target: https://raw.githubusercontent.com/luckytianyiyan/TyStrings/master/resource/tystrings.gif
    :alt: TyStrings Screenshot
+.. |codebeat| image:: https://codebeat.co/badges/91f19856-ae12-4423-b2cb-a883ec4b5e05
+   :target: https://codebeat.co/projects/github-com-luckytianyiyan-tystrings-master
+   :alt: Codebeat Badge
