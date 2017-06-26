@@ -9,5 +9,9 @@ help: ## show this help message and exit
 bootstrap: ## setup development tools
 	@brew install ttygif
 
+pack:
+	@python setup.py sdist
+	@python setup.py bdist_wheel
+
 %:
 	@:
