@@ -11,6 +11,8 @@ class CLIBaseTest(unittest.TestCase):
     def setUp(self):
         self.temp_path = tempfile.mkdtemp()
         self.cwd = self.temp_path
+        self.app_id = '20160709000024959'
+        self.secret_key = 'ke4UYwwvvgV9iQEIVjrC'
 
     def tearDown(self):
         rmtree(self.temp_path)
@@ -49,11 +51,13 @@ class CLIBaseTest(unittest.TestCase):
         dst_lang = 'zh'
         src_lang = 'en'
 
-        self.assertEqual(0, self.call(subcommand, src, dst, '--dst-lang', dst_lang, '--src-lang', src_lang))
+        self.assertEqual(0, self.call(subcommand, src, dst, '--appid', self.app_id, '--secret', self.secret_key,
+                                      '--dst-lang', dst_lang, '--src-lang', src_lang))
         self.assertTrue(os.path.exists(dst))
         os.remove(dst)
 
-        self.assertEqual(0, self.call(subcommand, src, dst, '--dst-lang', dst_lang))
+        self.assertEqual(0, self.call(subcommand, src, dst, '--appid', self.app_id, '--secret', self.secret_key,
+                                      '--dst-lang', dst_lang, '--dst-lang', dst_lang))
         self.assertTrue(os.path.exists(dst))
 
     def test_generate(self):
