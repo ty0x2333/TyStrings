@@ -38,7 +38,7 @@ delay 0.5
 runTyStringsSubCommand("generate", {"$(find . -name \\*.m)", "-o", "en.lproj zh-Hans.lproj"})
 delay 2
 clear()
-runTyStringsSubCommand("translate", {"strings/base_translator.strings", "zh-Hans.lproj/base_translator.strings", "--dst-lang", "zh", "--src-lang", "en"})
+runTyStringsSubCommand("translate", {"strings/base_translator.strings", "zh-Hans.lproj/base_translator.strings", "--dst-lang", "zh", "--src-lang", "en", "--appid", "20160709000024959", "--secret", "ke4UYwwvvgV9iQEIVjrC"})
 delay 2
 clear()
 runTyStringsSubCommand("diff", {"strings/diff1.strings", "strings/diff2.strings"})

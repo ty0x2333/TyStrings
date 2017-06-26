@@ -51,6 +51,10 @@ def arg_parser():
                                              help='using Baidu Translate Service to translate `.strings` file.')
     translate_parser.add_argument('source', help='source `.strings` file')
     translate_parser.add_argument('destination', help='destination, a file or directory')
+    translate_parser.add_argument('--appid', required=True, dest='app_id', help='Baidu Translation AppId. '
+                                                               'http://api.fanyi.baidu.com/api/trans/product/apidoc')
+    translate_parser.add_argument('--secret', required=True, dest='secret_key', help='Baidu Translation SecretKey. '
+                                                               'http://api.fanyi.baidu.com/api/trans/product/apidoc')
     translate_parser.add_argument('--dst-lang', required=True, help='destination language')
     translate_parser.add_argument('-s', '--src-lang', help='source language')
 
@@ -95,7 +99,7 @@ def generate(args):
 
 
 def translate(args):
-    translator = Translator(args.source, lang=args.src_lang)
+    translator = Translator(args.source, app_id=args.app_id, secret_key=args.secret_key, lang=args.src_lang)
     translateds = translator.translate(args.destination, dst_lang=args.dst_lang)
     rows = []
     for k in translateds.keys():
