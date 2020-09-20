@@ -76,3 +76,8 @@
 
 #### Bug Fixed
 1. Translate Error
+
+1.2.1
+---
+#### Feature
+1. Support python 3
