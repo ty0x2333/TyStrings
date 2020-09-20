@@ -37,7 +37,8 @@ def arg_parser():
         __/ |                         __/ |
        |___/                         |___/
     """
-    parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter, description=description)
+    parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter, description=description,
+                                     parents=[parent_parser()])
     parser.add_argument('--version', action='version', version=__version__)
     subparsers = parser.add_subparsers(title='subcommands', dest='action')
 
@@ -85,6 +86,8 @@ def main(argv=None):
         lint(args=args)
     elif args.action == 'diff':
         diff(args=args)
+    else:
+        parser.print_help()
 
     exit(0)
 
