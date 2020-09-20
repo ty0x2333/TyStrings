@@ -13,7 +13,7 @@
 
 strings file tool for iOS / macOS developers
 
-|pypi| |build| |coverage| |license| |codebeat|
+|pypi| |python| |build| |coverage| |license| |codebeat|
 
 |screenshot|
 
