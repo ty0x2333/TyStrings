@@ -3,4 +3,4 @@ from .strings import *
 from .translator import *
 from .version import __version__
 
-__author__ = 'luckytianyiyan@gmail.com'
+__author__ = 'ty0x2333@gmail.com'

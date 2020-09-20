@@ -5,7 +5,6 @@ from .tylogger import logger, GHOST_EMOJI
 from .strings import Strings, DEFAULT_ENCODING
 from .baidu import BaiduTranslator
 
-
 logging.getLogger("requests").setLevel(logger.level)
 
 
