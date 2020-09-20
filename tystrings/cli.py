@@ -37,7 +37,8 @@ def arg_parser():
         __/ |                         __/ |
        |___/                         |___/
     """
-    parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter, description=description)
+    parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter, description=description,
+                                     parents=[parent_parser()])
     parser.add_argument('--version', action='version', version=__version__)
     subparsers = parser.add_subparsers(title='subcommands', dest='action')
 
@@ -52,9 +53,9 @@ def arg_parser():
     translate_parser.add_argument('source', help='source `.strings` file')
     translate_parser.add_argument('destination', help='destination, a file or directory')
     translate_parser.add_argument('--appid', required=True, dest='app_id', help='Baidu Translation AppId. '
-                                                               'http://api.fanyi.baidu.com/api/trans/product/apidoc')
+                                                                                'http://api.fanyi.baidu.com/api/trans/product/apidoc')
     translate_parser.add_argument('--secret', required=True, dest='secret_key', help='Baidu Translation SecretKey. '
-                                                               'http://api.fanyi.baidu.com/api/trans/product/apidoc')
+                                                                                     'http://api.fanyi.baidu.com/api/trans/product/apidoc')
     translate_parser.add_argument('--dst-lang', required=True, help='destination language')
     translate_parser.add_argument('-s', '--src-lang', help='source language')
 
@@ -85,6 +86,8 @@ def main(argv=None):
         lint(args=args)
     elif args.action == 'diff':
         diff(args=args)
+    else:
+        parser.print_help()
 
     exit(0)
 

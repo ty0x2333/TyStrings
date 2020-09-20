@@ -15,9 +15,7 @@ class BaiduTranslator(object):
         if not question:
             return result
         salt = random.randint(32768, 65536)
-        md5 = hashlib.md5()
-        md5.update(self.app_id + question.encode('utf8') + str(salt) + self.secret_key)
-        sign = md5.hexdigest()
+        sign = hashlib.md5((self.app_id + question + str(salt) + self.secret_key).encode('utf8')).hexdigest()
         params = {'appid': self.app_id,
                   'q': question,
                   'from': 'auto' if src_lang is None else src_lang,

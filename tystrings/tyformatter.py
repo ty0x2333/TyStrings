@@ -1,6 +1,7 @@
 import logging
-import tylogger
 from colorama import Fore
+
+from . import tylogger
 
 
 class TyFormatter(logging.Formatter):
