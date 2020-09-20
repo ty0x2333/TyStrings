@@ -78,7 +78,7 @@ class Strings(object):
         while process.poll() is None:
             line = process.stdout.readline()
             if line:
-                output += line
+                output += line.decode('utf8')
                 logger.debug(line.strip())
         logger.finished(process.returncode)
 
