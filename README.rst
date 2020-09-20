@@ -81,6 +81,10 @@ compare two `.strings` files:
    :target: https://pypi.python.org/pypi/TyStrings
    :alt: Python Package Index
 
+.. |python| image:: https://img.shields.io/badge/python-3-blue
+   :target: https://pypi.python.org/pypi/TyStrings
+   :alt: Python Version Support
+
 .. |license| image:: https://img.shields.io/github/license/luckytianyiyan/TyStrings.svg?maxAge=2592000
    :target: LICENSE
    :alt: MIT License
