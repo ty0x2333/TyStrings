@@ -95,7 +95,7 @@ def main(argv=None):
 def generate(args):
     dsts = args.destinations if args.destinations else ["."]
 
-    strings = Strings(aliases=args.aliases, encoding=args.utf8)
+    strings = Strings(aliases=args.aliases, encoding='utf8' if args.utf8 else None)
     for dst in dsts:
         strings.generate(files=args.files, dst=dst)
     logger.success('have fun!')

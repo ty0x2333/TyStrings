@@ -103,10 +103,18 @@ class Strings(object):
         if os.path.exists(filename):
             line_end = [0]
             contents = ''
-            with codecs.open(filename, mode='r', encoding=encoding if encoding else DEFAULT_ENCODING) as f:
-                for line in f.readlines():
-                    contents += line
-                    line_end.append(len(contents))
+            try:
+                with codecs.open(filename, mode='r', encoding=encoding if encoding else DEFAULT_ENCODING) as f:
+                    for line in f.readlines():
+                        contents += line
+                        line_end.append(len(contents))
+            except UnicodeDecodeError:
+                with codecs.open(filename, mode='r',
+                                 encoding=DEFAULT_ENCODING if encoding != DEFAULT_ENCODING else 'utf8') as f:
+                    for line in f.readlines():
+                        contents += line
+                        line_end.append(len(contents))
+
             prog = re.compile(r"\s*\"(?P<key>.*?)\"\s*=\s*\"(?P<value>[\s\S]*?)\"\s*;", re.MULTILINE)
             for match in prog.finditer(contents):
                 key = match.group('key')
