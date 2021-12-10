@@ -29,29 +29,30 @@ Usage
 .. code-block:: bash
 
   $ tystrings -h
-    usage: tystrings [-h] [--version] {generate,translate,lint,diff} ...
+    usage: tystrings [-h] [-v] [--utf8] [--version] {generate,translate,lint,diff} ...
 
-     _______     _____ _        _
-    |__   __|   / ____| |      (_)
-      | |_   _| (___ | |_ _ __ _ _ __   __ _ ___
-      | | | | |\___ \| __| '__| | '_ \ / _` / __|
-      | | |_| |____) | |_| |  | | | | | (_| \__ \
-      |_|\__, |_____/ \__|_|  |_|_| |_|\__, |___/
-          __/ |                         __/ |
-         |___/                         |___/
+      _______     _____ _        _
+     |__   __|   / ____| |      (_)
+        | |_   _| (___ | |_ _ __ _ _ __   __ _ ___
+        | | | | |\___ \| __| '__| | '_ \ / _` / __|
+        | | |_| |____) | |_| |  | | | | | (_| \__ \
+        |_|\__, |_____/ \__|_|  |_|_| |_|\__, |___/
+            __/ |                         __/ |
+           |___/                         |___/
 
 
     optional arguments:
-    -h, --help            show this help message and exit
-    --version             show program's version number and exit
+      -h, --help            show this help message and exit
+      -v, --verbose         show more debugging information
+      --utf8                use encoding UTF-8
+      --version             show program's version number and exit
 
     subcommands:
-    {generate,translate,lint,diff}
-      generate            generate `.strings` file from source code files.
-      translate           using Baidu Translate Service to translate `.strings`
-                          file.
-      lint                Validates a `.strings` file.
-      diff                Compare `.strings` files line by line.
+      {generate,translate,lint,diff}
+        generate            generate `.strings` file from source code files.
+        translate           using Baidu Translate Service to translate `.strings` file.
+        lint                Validates a `.strings` file.
+        diff                Compare `.strings` files line by line.
 
 To run `tystrings generate` over all .m files in your project, you can invoke it, for example, like this:
 
