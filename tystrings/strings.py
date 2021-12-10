@@ -122,7 +122,7 @@ class Strings(object):
                 value = match.group('value')
                 match.groupdict()
                 line_no = next(i for i in range(len(line_end)) if line_end[i] > key_start)
-                yield (key, value, line_no)
+                yield key, value, line_no
 
     @property
     def generated_filenames(self):

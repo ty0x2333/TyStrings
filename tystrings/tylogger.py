@@ -42,7 +42,7 @@ class TyLogger(logging.Logger):
     def finished(self, return_code, *args, **kwargs):
         self.debug(BEER_EMOJI + ' process finished with %s' % ('success' if
                                                                return_code == 0 or return_code is None else (
-                    'exit code %r' % return_code)), *args, **kwargs)
+                'exit code %r' % return_code)), *args, **kwargs)
 
     def diffs(self, diffs, *args, **kwargs):
         def __coloring(elem, color):

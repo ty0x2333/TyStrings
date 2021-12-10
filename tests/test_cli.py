@@ -1,9 +1,8 @@
-import unittest
-import sys
-import tempfile
-import subprocess
 import os
+import tempfile
+import unittest
 from shutil import rmtree
+
 from tystrings import cli
 
 
@@ -95,5 +94,6 @@ class CLIWhiteTests(CLIBaseTest):
             cli.main(list(new_args))
         return cm.exception.code
 
+
 # ignore base class
-del(CLIBaseTest)
+del CLIBaseTest

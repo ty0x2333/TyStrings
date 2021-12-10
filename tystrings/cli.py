@@ -52,10 +52,18 @@ def arg_parser():
                                              help='using Baidu Translate Service to translate `.strings` file.')
     translate_parser.add_argument('source', help='source `.strings` file')
     translate_parser.add_argument('destination', help='destination, a file or directory')
-    translate_parser.add_argument('--appid', required=True, dest='app_id', help='Baidu Translation AppId. '
-                                                                                'http://api.fanyi.baidu.com/api/trans/product/apidoc')
-    translate_parser.add_argument('--secret', required=True, dest='secret_key', help='Baidu Translation SecretKey. '
-                                                                                     'http://api.fanyi.baidu.com/api/trans/product/apidoc')
+    translate_parser.add_argument(
+        '--appid',
+        required=True,
+        dest='app_id',
+        help='Baidu Translation AppId. http://api.fanyi.baidu.com/api/trans/product/apidoc'
+    )
+    translate_parser.add_argument(
+        '--secret',
+        required=True,
+        dest='secret_key',
+        help='Baidu Translation SecretKey. http://api.fanyi.baidu.com/api/trans/product/apidoc'
+    )
     translate_parser.add_argument('--dst-lang', required=True, help='destination language')
     translate_parser.add_argument('-s', '--src-lang', help='source language')
 
@@ -146,9 +154,9 @@ def diff(args):
         for elem in elems1:
             if not next((e for e in elems2 if e[0] == elem[0] and (only_key or e[1] == elem[1])), False):
                 if prefix == '+':
-                    yield (prefix, elem[2], '', elem[0], elem[1])
+                    yield prefix, elem[2], '', elem[0], elem[1]
                 else:
-                    yield (prefix, '', elem[2], elem[0], elem[1])
+                    yield prefix, '', elem[2], elem[0], elem[1]
 
     encoding = 'utf8' if args.utf8 else None
     logger.process('Parsing File1 Reference...')
