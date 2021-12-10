@@ -108,7 +108,7 @@ class Strings(object):
                     for line in f.readlines():
                         contents += line
                         line_end.append(len(contents))
-            except UnicodeDecodeError:
+            except UnicodeError:
                 with codecs.open(filename, mode='r',
                                  encoding=DEFAULT_ENCODING if encoding != DEFAULT_ENCODING else 'utf8') as f:
                     for line in f.readlines():
@@ -143,35 +143,34 @@ class Strings(object):
         result = {}
         translated = []
         try:
-            f = codecs.open(dst, "r", DEFAULT_ENCODING)
-            lines = f.readlines()
-            for (index, line) in enumerate(lines):
-                match = re.match(r'"(?P<key>.*?)" = "(?P<value>.*?)";', line)
-                if match is not None:
-                    key = match.group('key')
-                    value = match.group('value')
-                    answer = reference.get(key, None)
+            with codecs.open(dst, "r", encoding=DEFAULT_ENCODING) as f:
+                lines = f.readlines()
+        except UnicodeError:
+            with codecs.open(dst, "r", encoding=DEFAULT_ENCODING if encoding != DEFAULT_ENCODING else 'utf8') as f:
+                lines = f.readlines()
+        for (index, line) in enumerate(lines):
+            match = re.match(r'"(?P<key>.*?)" = "(?P<value>.*?)";', line)
+            if match is not None:
+                key = match.group('key')
+                value = match.group('value')
+                answer = reference.get(key, None)
 
-                    if answer is not None:
-                        if reference[key] != value:
-                            line = '"%s" = "%s";\n' % (key, answer)
-                            lines[index] = line
-                            translated.append(key)
-                        result[key] = answer
-                    else:
-                        result[key] = value
-            f.close()
+                if answer is not None:
+                    if reference[key] != value:
+                        line = '"%s" = "%s";\n' % (key, answer)
+                        lines[index] = line
+                        translated.append(key)
+                    result[key] = answer
+                else:
+                    result[key] = value
 
-            logger.done('Translated: %s' % dst)
-            logger.info('count: %d' % len(translated))
-            for k in translated:
-                logger.debug('%s => %s' % (k, result[k]))
+        logger.done('Translated: %s' % dst)
+        logger.info('count: %d' % len(translated))
+        for k in translated:
+            logger.debug('%s => %s' % (k, result[k]))
 
-            f = codecs.open(dst, "w+", encoding=encoding)
+        with codecs.open(dst, "w+", encoding=encoding) as f:
             f.writelines(lines)
             f.flush()
             f.close()
-            return result
-            # logger.addition('Write strings file to: %s' % self.filename)
-        except Exception as e:
-            logger.error(e)
+        return result
